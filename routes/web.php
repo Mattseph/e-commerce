@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware('guest', 'redirect_admin')->prefix('admin')->group(function () {
     Route::get('create', [AdminAuthController::class, 'showloginForm'])->name('admin.create');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login');
-    Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 });
 
 
