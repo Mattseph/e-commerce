@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     protected $table = 'brands';
-    protected $fillable = [];
+    protected $fillable = ['name', 'slug'];
 
     public function product() {
         $this->hasMany(Product::class);
