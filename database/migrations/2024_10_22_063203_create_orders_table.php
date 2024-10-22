@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_address_id')->constrained('user_addresses')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->decimal('total_price', 20, 2);
+            $table->string('status', 45);
+            $table->string('session_id', 255);
+            $table->foreignId('created_by')->constrained('users')->nullable();
+            $table->foreignId('updated_by')->constrained('users')->nullable();
             $table->timestamps();
         });
     }
