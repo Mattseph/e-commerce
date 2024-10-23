@@ -28,7 +28,7 @@ class OrderFactory extends Factory
             'user_address_id' => fake()->randomElement($user_address_id),
             'total_price' => fake()->randomFloat(2),
             'status' => fake()->randomElement(['Status1', 'Status2']),
-            'session_id' => fake()->unique()->randomNumber(10),
+            'session_id' => fake()->unique()->randomNumber(8),
             'created_by' => fake()->randomElement($user_id),
             'updated_by' => fake()->randomElement($user_id),
         ];
