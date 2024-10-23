@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,16 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+        $user_id = User::pluck('id')->toArray();
+        $user_address_id = UserAddress::pluck('id')->toArray();
+
         return [
-            //
+            'user_address_id' => fake()->randomNumber($user_address_id),
+            'total_price' => fake()->randomFloat(2),
+            'status' => fake()->randomElement(['Status1', 'Status2']),
+            'session_id' => fake()->randomNumber(10),
+            'created_by' => fake()->randomNumber($user_id),
+            'updated_by' => fake()->randomNumber($user_id),
         ];
     }
 }
