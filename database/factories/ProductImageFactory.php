@@ -22,7 +22,7 @@ class ProductImageFactory extends Factory
     {
         $product_id = Product::pluck('id')->toArray();
         return [
-            'product_id' => fake()->randomNumber($product_id),
+            'product_id' => fake()->randomElement($product_id),
             'image' => fake()->imageUrl(),
         ];
     }

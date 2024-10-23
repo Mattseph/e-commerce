@@ -26,8 +26,8 @@ class OrderItemFactory extends Factory
         $order_id = Order::pluck('id')->toArray();
 
         return [
-            'product_id' => fake()->randomNumber($product_id),
-            'order_id' => fake()->randomNumber($order_id),
+            'product_id' => fake()->randomElement($product_id),
+            'order_id' => fake()->randomElement($order_id),
             'quantity' => fake()->randomNumber(4),
             'unit_price' => fake()->randomFloat(2),
         ];

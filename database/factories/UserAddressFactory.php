@@ -24,7 +24,7 @@ class UserAddressFactory extends Factory
         $user_id = User::pluck('id')->toArray();
 
         return [
-            'user_id' => fake()->randomNumber($user_id),
+            'user_id' => fake()->randomElement($user_id),
             'type' => fake()->text(45),
             'address1' => fake()->address(),
             'address2' => fake()->address(),

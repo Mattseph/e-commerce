@@ -33,8 +33,8 @@ class ProductFactory extends Factory
             'published' => fake()->boolean(),
             'inStock' => fake()->boolean(),
             'price' => fake()->randomFloat(2),
-            'created_by' => fake()->randomNumber($user_id),
-            'updated_by' => fake()->randomNumber($user_id),
+            'created_by' => fake()->randomElement($user_id),
+            'updated_by' => fake()->randomElement($user_id),
         ];
     }
 }

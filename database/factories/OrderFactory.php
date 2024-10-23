@@ -25,12 +25,12 @@ class OrderFactory extends Factory
         $user_address_id = UserAddress::pluck('id')->toArray();
 
         return [
-            'user_address_id' => fake()->randomNumber($user_address_id),
+            'user_address_id' => fake()->randomElement($user_address_id),
             'total_price' => fake()->randomFloat(2),
             'status' => fake()->randomElement(['Status1', 'Status2']),
             'session_id' => fake()->unique()->randomNumber(10),
-            'created_by' => fake()->randomNumber($user_id),
-            'updated_by' => fake()->randomNumber($user_id),
+            'created_by' => fake()->randomElement($user_id),
+            'updated_by' => fake()->randomElement($user_id),
         ];
     }
 }
