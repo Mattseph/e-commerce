@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class UserAddressFactory extends Factory
 {
+
+    protected $model = UserAddress::class;
     /**
      * Define the model's default state.
      *

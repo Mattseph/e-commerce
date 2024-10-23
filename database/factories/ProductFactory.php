@@ -26,7 +26,7 @@ class ProductFactory extends Factory
         return [
             'category_id' => fake()->randomElement($category_id),
             'brand_id' => fake()->randomElement($brand_id),
-            'title' => fake()->realText(),
+            'title' => fake()->unique()->realText(),
             'slug' => fake()->realText(),
             'quantity' => fake()->randomNumber(4),
             'description' => fake()->realText(),
