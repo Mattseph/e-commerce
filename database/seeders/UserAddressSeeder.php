@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\UserAddress;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserAddressSeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class UserAddressSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        UserAddress::factory(5)->create();
     }
 }
