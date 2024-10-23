@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        if (User::count() < 5) {
+        if (User::count() !== 1) {
             $this->call(UserSeeder::class);
         }
 
@@ -38,12 +38,20 @@ class DatabaseSeeder extends Seeder
             $this->call(BrandSeeder::class);
         }
 
-        if (CartItem::count() < 5) {
-            $this->call(CartItemSeeder::class);
-        }
-
         if (Category::count() < 5) {
             $this->call(CategorySeeder::class);
+        }
+
+        if (Product::count() < 5) {
+            $this->call(ProductSeeder::class);
+        }
+
+        if (UserAddress::count() < 5) {
+            $this->call(UserAddressSeeder::class);
+        }
+
+        if (CartItem::count() < 5) {
+            $this->call(CartItemSeeder::class);
         }
 
         if (Order::count() < 5) {
@@ -58,13 +66,7 @@ class DatabaseSeeder extends Seeder
             $this->call(PaymentSeeder::class);
         }
 
-        if (Product::count() < 5) {
-            $this->call(ProductSeeder::class);
-        }
 
-        if (UserAddress::count() < 5) {
-            $this->call(UserAddressSeeder::class);
-        }
 
     }
 }
