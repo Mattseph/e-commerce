@@ -31,39 +31,39 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         if (User::count() < 5) {
-            $this->call(UserFactory::class);
+            $this->call(UserSeeder::class);
         }
 
         if (Brand::count() < 5) {
-            $this->call(BrandFactory::class);
+            $this->call(BrandSeeder::class);
         }
 
         if (CartItem::count() < 5) {
-            $this->call(CartItemFactory::class);
+            $this->call(CartItemSeeder::class);
         }
 
         if (Category::count() < 5) {
-            $this->call(CategoryFactory::class);
+            $this->call(CategorySeeder::class);
         }
 
         if (Order::count() < 5) {
-            $this->call(OrderFactory::class);
+            $this->call(OrderSeeder::class);
         }
 
         if (OrderItem::count() < 5) {
-            $this->call(OrderItemFactory::class);
+            $this->call(OrderItemSeeder::class);
         }
 
         if (Payment::count() < 5) {
-            $this->call(PaymentFactory::class);
+            $this->call(PaymentSeeder::class);
         }
 
         if (Product::count() < 5) {
-            $this->call(ProductFactory::class);
+            $this->call(ProductSeeder::class);
         }
 
         if (UserAddress::count() < 5) {
-            $this->call(UserAddressFactory::class);
+            $this->call(UserAddressSeeder::class);
         }
 
     }
