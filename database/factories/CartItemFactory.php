@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class CartItemFactory extends Factory
      */
     public function definition(): array
     {
+
+        $product_id = Product::pluck('id')->toArray();
+
         return [
-            //
+            'product_id' => fake()->randomNumber($product_id),
+            'quantity' => fake()->randomNumber(4),
         ];
     }
 }
