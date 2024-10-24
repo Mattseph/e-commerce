@@ -38,13 +38,13 @@ Route::middleware('auth', 'is_admin')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     Route::prefix('product')->group( function () {
-        Route::get('/', [ProductController::class, 'index'])->name('product.index');
-        Route::get('/{product}', [ProductController::class, 'view'])->name('product.view');
-        Route::get('/create', [ProductController::class, 'create'])->name('product.create');
-        Route::post('/', [ProductController::class, 'store'])->name('product.store');
-        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
-        Route::put('/{product}', [ProductController::class, 'update'])->name('product.update');
-        Route::delete('/', [ProductController::class, 'destroy'])->name('product.destroy');
+        Route::get('/', [ProductController::class, 'index'])->name('admin.product.index');
+        Route::get('/{product}', [ProductController::class, 'view'])->name('admin.product.view');
+        Route::get('/create', [ProductController::class, 'create'])->name('admin.product.create');
+        Route::post('/', [ProductController::class, 'store'])->name('admin.product.store');
+        Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('admin.product.edit');
+        Route::put('/{product}', [ProductController::class, 'update'])->name('admin.product.update');
+        Route::delete('/', [ProductController::class, 'destroy'])->name('admin.product.destroy');
     }
 );
 
