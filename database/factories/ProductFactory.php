@@ -26,13 +26,13 @@ class ProductFactory extends Factory
         return [
             'category_id' => fake()->randomElement($category_id),
             'brand_id' => fake()->randomElement($brand_id),
-            'title' => fake()->unique()->realText(),
-            'slug' => fake()->realText(),
+            'title' => fake()->unique()->realText(20),
+            'slug' => fake()->realText(20),
             'quantity' => fake()->randomNumber(4),
             'description' => fake()->realText(),
             'published' => fake()->boolean(),
             'inStock' => fake()->boolean(),
-            'price' => fake()->randomFloat(2, $max=8),
+            'price' => fake()->randomFloat(2, $max=6),
             'created_by' => fake()->randomElement($user_id),
             'updated_by' => fake()->randomElement($user_id),
         ];
