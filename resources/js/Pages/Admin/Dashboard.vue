@@ -11,8 +11,8 @@ onMounted(() => {
 
 <template>
     <AdminLayout>
-        <Head title="Admin Dashboard"/>
-        <main class="p-4 md:ml-64 h-auto pt-20">
+        <Head title="Admin Dashboard" />
+        <div>
             <div
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4"
             >
@@ -63,6 +63,6 @@ onMounted(() => {
                     class="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-48 md:h-72"
                 ></div>
             </div>
-        </main>
+        </div>
     </AdminLayout>
 </template>
