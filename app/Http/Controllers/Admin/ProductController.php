@@ -15,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::select('title', 'category_id', 'brand_id', 'inStock', 'price')->get();
+        $products = Product::with(['category', 'brand'])->select('title', 'category_id', 'brand_id', 'inStock', 'price')->get();
 
 
         Debugbar::info($products);
