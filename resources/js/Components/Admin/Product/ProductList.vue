@@ -15,10 +15,10 @@ defineProps({
         >
             {{ product.title }}
         </th>
-        <td class="px-4 py-3">PC</td>
-        <td class="px-4 py-3">Apple</td>
-        <td class="px-4 py-3">300</td>
-        <td class="px-4 py-3">$2999</td>
+        <td class="px-4 py-3">{{ product.category.name }}</td>
+        <td class="px-4 py-3">{{ product.brand.name }}</td>
+        <td class="px-4 py-3">{{ product.inStock }}</td>
+        <td class="px-4 py-3">$ {{ product.price }}</td>
         <td class="px-4 py-3 flex items-center justify-end">
             <button
                 id="apple-imac-27-dropdown-button"
