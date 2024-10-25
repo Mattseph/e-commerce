@@ -262,7 +262,7 @@ onMounted(() => {
                                     </th>
                                     <th scope="col" class="px-4 py-3">Brand</th>
                                     <th scope="col" class="px-4 py-3">
-                                        Description
+                                        Stock
                                     </th>
                                     <th scope="col" class="px-4 py-3">Price</th>
                                     <th scope="col" class="px-4 py-3">
