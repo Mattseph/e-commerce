@@ -49,10 +49,10 @@ class User extends Authenticatable
 
 
     public function user_addresses () {
-        $this->hasMany(UserAddress::class);
+        return $this->hasMany(UserAddress::class);
     }
 
     public function order() {
-        $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
 }

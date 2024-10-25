@@ -24,10 +24,10 @@ class UserAddress extends Model
         'country_code',
     ];
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function orders() {
-        $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
 }

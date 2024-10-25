@@ -36,18 +36,18 @@ class Product extends Model
     }
 
     public function category() {
-        $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function brand() {
-        $this->belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class);
     }
 
     public function cart_items() {
-        $this->hasMany(CartItem::class);
+        return $this->hasMany(CartItem::class);
     }
 
     public function product_images() {
-        $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class);
     }
 }
