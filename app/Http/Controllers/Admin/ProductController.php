@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Barryvdh\Debugbar\Facades\Debugbar;
 
 class ProductController extends Controller
 {
@@ -14,7 +15,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::select('title')->get();
+        $products = Product::select('title', 'category_id', 'brand_id', 'inStock', 'price')->get();
+
+
+        Debugbar::info($products);
+        Debugbar::error('Error');
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
