@@ -1,10 +1,11 @@
 <script setup>
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, usePage, router } from "@inertiajs/vue3";
 import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
 import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import { descriptionItemProps } from "element-plus";
+import VueSweetalert2 from "vue-sweetalert2";
 
 const products = usePage().props.products;
 
@@ -33,6 +34,7 @@ const fields = reactive({
     brand_id: "",
     inStock: "",
     product_images: [],
+    productImages: [],
 });
 
 const addNewProduct = async () => {
@@ -46,8 +48,22 @@ const addNewProduct = async () => {
     Form.append("brand_id", fields.brand_id);
     Form.append("inStock", fields.inStock);
 
+    for (const image of productImage.value) {
+        Form.append('product_image[]', image.raw);
+    }
+
     try {
-        await router.post("/products/store", Form);
+        await router.post("/products/store", Form, {
+            onSuccess: page => {
+                Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    position: 'top-end',
+                    showConfirmationButton: false,
+                    title: page.groups.flash.success
+                })
+            }
+        });
     } catch (error) {
         console.log(error);
     }
