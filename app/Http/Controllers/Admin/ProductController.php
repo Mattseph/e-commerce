@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
 use App\Models\Product;
+use Illuminate\Support\Str;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Barryvdh\Debugbar\Facades\Debugbar;
+use App\Http\Requests\Product\ProductStoreRequest;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ProductController extends Controller
 {
@@ -15,7 +19,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['category', 'brand'])->select('title', 'category_id', 'brand_id', 'inStock', 'price')->get();
+        $products = Product::select('title', 'category_id', 'brand_id', 'inStock', 'price')->with([
+            'category',
+            'brand'
+        ])->get();
 
 
         Debugbar::info($products);
@@ -31,15 +38,36 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin.Product.Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $product = Product::create($validated);
+
+        if ($validated->hasFile('images')) {
+            $images = $request->file('images');
+
+            foreach ($images as $image) {
+                // Generate Unique Image Name
+
+                $newImgName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+                $image->move('product_images', $newImgName);
+
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'image' => 'product_images/' . $newImgName,
+                ]);
+            }
+        }
+
+        return Inertia::render('Admin/Product/Index');
     }
 
     /**
