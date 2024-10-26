@@ -1,22 +1,172 @@
 <script setup>
 import { Head, usePage } from "@inertiajs/vue3";
-import { onMounted } from "vue";
+import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
 import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
+import { descriptionItemProps } from "element-plus";
 
 const products = usePage().props.products;
 
-console.log(products);
+const dialogVisible = ref(false);
+const addModal = ref(false);
+const editModal = ref(false);
+
+const openAddModal = () => {
+    dialogVisible.value = true;
+    addModal.value = true;
+    editModal.value = false;
+};
+
+const openEditModal = (product) => {
+    dialogVisible.value = true;
+    addModal.value = false;
+    editModal.value = true;
+};
+
+const fields = reactive({
+    title: "",
+    price: "",
+    quantity: "",
+    description: "",
+    category_id: "",
+    brand_id: "",
+    inStock: "",
+    product_images: [],
+});
+
+const addNewProduct = async () => {
+    const Form = new FormData();
+
+    Form.append("title", fields.title);
+    Form.append("price", fields.price);
+    Form.append("quantity", fields.quantity);
+    Form.append("description", fields.description);
+    Form.append("category_id", fields.category_id);
+    Form.append("brand_id", fields.brand_id);
+    Form.append("inStock", fields.inStock);
+
+    try {
+        await router.post("/products/store", Form);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 onMounted(() => {
     initFlowbite();
 });
-
 </script>
 
 <template>
     <AdminLayout>
         <Head title="Product List" />
+
+        <el-dialog
+            v-model="dialogVisible"
+            width="500"
+            :before-close="handleClose"
+        >
+            <div
+                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
+            >
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    {{editModal ? 'Edit Product' : 'Create New Product'}}
+                </h3>
+
+            </div>
+            <form class="p-4 md:p-5">
+                <div class="grid gap-4 mb-4 grid-cols-2">
+                    <div class="col-span-2">
+                        <label
+                            for="name"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Name</label
+                        >
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="Type product name"
+                            required=""
+                        />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label
+                            for="price"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Price</label
+                        >
+                        <input
+                            type="number"
+                            name="price"
+                            id="price"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="$2999"
+                            required=""
+                        />
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <label
+                            for="category"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Category</label
+                        >
+                        <select
+                            id="category"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        >
+                            <option selected="">Select category</option>
+                            <option value="TV">TV/Monitors</option>
+                            <option value="PC">PC</option>
+                            <option value="GA">Gaming/Console</option>
+                            <option value="PH">Phones</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label
+                            for="description"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Product Description</label
+                        >
+                        <textarea
+                            id="description"
+                            rows="4"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Write product description here"
+                        ></textarea>
+                    </div>
+                </div>
+                <button
+                    type="submit"
+                    class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                    <svg
+                        class="me-1 -ms-1 w-5 h-5"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                            clip-rule="evenodd"
+                        ></path>
+                    </svg>
+                    Add new product
+                </button>
+            </form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="dialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" @click="dialogVisible = false">
+                        Confirm
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
+
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
             <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <!-- Start coding here -->
@@ -64,6 +214,7 @@ onMounted(() => {
                         >
                             <button
                                 type="button"
+                                @click="openAddModal"
                                 class="flex items-center justify-center text-white bg-orange-500 hover:bg-yellow-600 focus:ring-4 focus:ring-orange-200 font-medium rounded-lg text-sm px-4 py-2 dark:bg-orange-500 dark:hover:bg-orange-600 focus:outline-none dark:focus:ring-orange-700"
                             >
                                 <svg
@@ -261,9 +412,7 @@ onMounted(() => {
                                         Category
                                     </th>
                                     <th scope="col" class="px-4 py-3">Brand</th>
-                                    <th scope="col" class="px-4 py-3">
-                                        Stock
-                                    </th>
+                                    <th scope="col" class="px-4 py-3">Stock</th>
                                     <th scope="col" class="px-4 py-3">Price</th>
                                     <th scope="col" class="px-4 py-3">
                                         <span class="sr-only">Actions</span>
@@ -271,7 +420,11 @@ onMounted(() => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <ProductList v-for="product in products" :key="product.id" :product="product" />
+                                <ProductList
+                                    v-for="product in products"
+                                    :key="product.id"
+                                    :product="product"
+                                />
                             </tbody>
                         </table>
                     </div>
