@@ -8,6 +8,8 @@ import { descriptionItemProps } from "element-plus";
 import VueSweetalert2 from "vue-sweetalert2";
 
 const products = usePage().props.products;
+const brands = usePage().props.brands;
+const categories = usePage().props.categories;
 
 const dialogVisible = ref(false);
 const addModal = ref(false);
@@ -49,20 +51,20 @@ const addNewProduct = async () => {
     Form.append("inStock", fields.inStock);
 
     for (const image of productImage.value) {
-        Form.append('product_image[]', image.raw);
+        Form.append("product_image[]", image.raw);
     }
 
     try {
         await router.post("/products/store", Form, {
-            onSuccess: page => {
+            onSuccess: (page) => {
                 Swal.fire({
                     toast: true,
-                    icon: 'success',
-                    position: 'top-end',
+                    icon: "success",
+                    position: "top-end",
                     showConfirmationButton: false,
-                    title: page.groups.flash.success
-                })
-            }
+                    title: page.groups.flash.success,
+                });
+            },
         });
     } catch (error) {
         console.log(error);
@@ -87,27 +89,46 @@ onMounted(() => {
                 class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
             >
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    {{editModal ? 'Edit Product' : 'Create New Product'}}
+                    {{ editModal ? "Edit Product" : "Create New Product" }}
                 </h3>
-
             </div>
             <form class="p-4 md:p-5">
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label
-                            for="name"
+                            for="title"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >Name</label
+                            >Title</label
                         >
                         <input
+                            v-model="title"
                             type="text"
-                            name="name"
-                            id="name"
+                            name="title"
+                            id="title"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Type product name"
+                            placeholder="Type product title"
                             required=""
                         />
                     </div>
+
+                    <div class="col-span-2 sm:col-span-1">
+                        <label
+                            for="quantity"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Quantity</label
+                        >
+                        <input
+                            v-model="quantity"
+                            type="number"
+                            name="quantity"
+                            id="quantity"
+                            value="1"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            placeholder="$2999"
+                            required=""
+                        />
+                    </div>
+
                     <div class="col-span-2 sm:col-span-1">
                         <label
                             for="price"
@@ -115,14 +136,36 @@ onMounted(() => {
                             >Price</label
                         >
                         <input
+                            v-model="price"
                             type="number"
                             name="price"
                             id="price"
+                            step=".01"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="$2999"
                             required=""
                         />
                     </div>
+
+                    <div class="col-span-2 sm:col-span-1">
+                        <label
+                            for="brand"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                            >Brand</label
+                        >
+                        <select
+                            v-model="brand_id"
+                            id="brand"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                        >
+                            <option selected>Select Brand</option>
+                            <option value="TV">TV/Monitors</option>
+                            <option value="PC">PC</option>
+                            <option value="GA">Gaming/Console</option>
+                            <option value="PH">Phones</option>
+                        </select>
+                    </div>
+
                     <div class="col-span-2 sm:col-span-1">
                         <label
                             for="category"
@@ -130,16 +173,18 @@ onMounted(() => {
                             >Category</label
                         >
                         <select
+                            v-model="category_id"
                             id="category"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                         >
-                            <option selected="">Select category</option>
+                            <option selected>Select category</option>
                             <option value="TV">TV/Monitors</option>
                             <option value="PC">PC</option>
                             <option value="GA">Gaming/Console</option>
                             <option value="PH">Phones</option>
                         </select>
                     </div>
+
                     <div class="col-span-2">
                         <label
                             for="description"
@@ -147,6 +192,7 @@ onMounted(() => {
                             >Product Description</label
                         >
                         <textarea
+                            v-model="description"
                             id="description"
                             rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -173,14 +219,14 @@ onMounted(() => {
                     Add new product
                 </button>
             </form>
-            <template #footer>
+            <!-- <template #footer>
                 <div class="dialog-footer">
                     <el-button @click="dialogVisible = false">Cancel</el-button>
                     <el-button type="primary" @click="dialogVisible = false">
                         Confirm
                     </el-button>
                 </div>
-            </template>
+            </template> -->
         </el-dialog>
 
         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
