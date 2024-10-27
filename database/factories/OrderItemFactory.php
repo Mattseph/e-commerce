@@ -29,7 +29,7 @@ class OrderItemFactory extends Factory
             'product_id' => fake()->randomElement($product_id),
             'order_id' => fake()->randomElement($order_id),
             'quantity' => fake()->randomNumber(4),
-            'unit_price' => fake()->randomFloat(2,$max=8),
+            'unit_price' => fake()->randomFloat(2, $max = 6),
         ];
     }
 }
