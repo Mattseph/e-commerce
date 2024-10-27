@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Inertia\Inertia;
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Http\Requests\Product\ProductStoreRequest;
+use App\Models\Category;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ProductController extends Controller
@@ -24,12 +26,18 @@ class ProductController extends Controller
             'brand'
         ])->get();
 
+        $brands = Brand::get('name');
+
+        $categories = Category::get('name');
+
 
         Debugbar::info($products);
         Debugbar::error('Error');
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
+            'brands' => $brands,
+            'categories' => $categories,
         ]);
     }
 
