@@ -26,13 +26,10 @@ class ProductController extends Controller
             'brand'
         ])->get();
 
-        $brands = Brand::get('name');
+        $brands = Brand::select('id', 'name')->get();
 
-        $categories = Category::get('name');
+        $categories = Category::select('id', 'name')->get();
 
-
-        Debugbar::info($products);
-        Debugbar::error('Error');
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
