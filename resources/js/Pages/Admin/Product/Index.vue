@@ -4,6 +4,7 @@ import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
 import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
+import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import { descriptionItemProps } from "element-plus";
 import VueSweetalert2 from "vue-sweetalert2";
 
@@ -153,17 +154,13 @@ onMounted(() => {
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                             >Brand</label
                         >
-                        <select
+                        <BrandList
                             v-model="brand_id"
                             id="brand"
+                            :brands="brands"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                        >
-                            <option selected>Select Brand</option>
-                            <option value="TV">TV/Monitors</option>
-                            <option value="PC">PC</option>
-                            <option value="GA">Gaming/Console</option>
-                            <option value="PH">Phones</option>
-                        </select>
+                        />
+
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
