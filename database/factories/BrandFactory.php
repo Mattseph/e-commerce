@@ -21,8 +21,8 @@ class BrandFactory extends Factory
     {
 
         return [
-            'name' => fake()->unique()->realText(),
-            'slug' => fake()->realText(),
+            'name' => fake()->unique()->realText(15),
+            'slug' => fake()->realText(15),
         ];
     }
 }
