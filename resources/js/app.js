@@ -9,6 +9,10 @@ import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 import ElementPlus from "element-plus";
 import 'element-plus/dist/index.css'
 
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
+
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
 createInertiaApp({
@@ -23,6 +27,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue)
             .use(ElementPlus)
+            .use(Toast)
             .mount(el);
     },
     progress: {

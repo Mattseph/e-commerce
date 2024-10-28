@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "element-plus": "^2.8.6",
-        "flowbite": "^2.5.2"
+        "flowbite": "^2.5.2",
+        "vue-toastification": "^2.0.0-rc.5"
     }
 }
