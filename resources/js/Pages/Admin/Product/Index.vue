@@ -7,7 +7,7 @@ import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import CategoryList from "@/Components/Admin/Product/CategoryList.vue";
 import { descriptionItemProps } from "element-plus";
-import VueSweetalert2 from "vue-sweetalert2";
+
 
 const products = usePage().props.products;
 const brands = usePage().props.brands;
@@ -59,13 +59,7 @@ const addNewProduct = async () => {
     try {
         await router.post("/products/store", Form, {
             onSuccess: (page) => {
-                Swal.fire({
-                    toast: true,
-                    icon: "success",
-                    position: "top-end",
-                    showConfirmationButton: false,
-                    title: page.groups.flash.success,
-                });
+
             },
         });
     } catch (error) {
