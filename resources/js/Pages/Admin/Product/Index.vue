@@ -2,12 +2,12 @@
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
+import { useToast } from "vue-toastification";
 import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import CategoryList from "@/Components/Admin/Product/CategoryList.vue";
 import { descriptionItemProps } from "element-plus";
-
 
 const products = usePage().props.products;
 const brands = usePage().props.brands;
@@ -16,6 +16,8 @@ const categories = usePage().props.categories;
 const dialogVisible = ref(false);
 const addModal = ref(false);
 const editModal = ref(false);
+
+const toast = useToast();
 
 const openAddModal = () => {
     dialogVisible.value = true;
@@ -36,34 +38,40 @@ const fields = reactive({
     description: "",
     category_id: "",
     brand_id: "",
-    inStock: "",
+    inStock: 0,
     product_images: [],
     productImages: [],
+    created_by: 1,
+    updated_by: 1,
 });
 
 const addNewProduct = async () => {
     const Form = new FormData();
 
+    Form.append("category_id", fields.category_id);
+    Form.append("brand_id", fields.brand_id);
     Form.append("title", fields.title);
     Form.append("price", fields.price);
     Form.append("quantity", fields.quantity);
     Form.append("description", fields.description);
-    Form.append("category_id", fields.category_id);
-    Form.append("brand_id", fields.brand_id);
     Form.append("inStock", fields.inStock);
 
-    for (const image of productImage.value) {
+    for (const image of fields.productImages) {
         Form.append("product_image[]", image.raw);
     }
 
-    try {
-        await router.post("/products/store", Form, {
-            onSuccess: (page) => {
+    Form.append("created_by", fields.created_by);
+    Form.append("updated_by", fields.updated_by);
 
+    try {
+        await router.post("product/", Form, {
+            onSuccess: (page) => {
+                dialogVisible.value = false;
+                toast.success("Successfully Added Product");
             },
         });
     } catch (error) {
-        console.log(error);
+        console.log(error.response || error);
     }
 };
 
@@ -98,7 +106,7 @@ onMounted(() => {
                             >Title</label
                         >
                         <input
-                            v-model="title"
+                            v-model="fields.title"
                             type="text"
                             name="title"
                             id="title"
@@ -115,7 +123,7 @@ onMounted(() => {
                             >Quantity</label
                         >
                         <input
-                            v-model="quantity"
+                            v-model="fields.quantity"
                             type="number"
                             name="quantity"
                             id="quantity"
@@ -133,7 +141,7 @@ onMounted(() => {
                             >Price</label
                         >
                         <input
-                            v-model="price"
+                            v-model="fields.price"
                             type="number"
                             name="price"
                             id="price"
@@ -151,7 +159,7 @@ onMounted(() => {
                             >Brand</label
                         >
                         <BrandList
-                            v-model="brand_id"
+                            v-model="fields.brand_id"
                             id="brand"
                             :brands="brands"
                         />
@@ -164,7 +172,7 @@ onMounted(() => {
                             >Category</label
                         >
                         <CategoryList
-                            v-model="category_id"
+                            v-model="fields.category_id"
                             id="category"
                             :categories="categories"
                         />
@@ -177,7 +185,7 @@ onMounted(() => {
                             >Product Description</label
                         >
                         <textarea
-                            v-model="description"
+                            v-model="fields.description"
                             id="description"
                             rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
