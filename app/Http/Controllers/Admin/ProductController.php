@@ -55,10 +55,8 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        Debugbar::info($product);
-
-        if ($validated['images']->hasFile('images')) {
-            $images = $request->file('images');
+        if ($request->hasFile('product_images')) {
+            $images = $request->file('product_images');
 
             foreach ($images as $image) {
                 // Generate Unique Image Name
@@ -74,9 +72,13 @@ class ProductController extends Controller
             }
         }
 
-        return Inertia::render('Admin/Product/Index');
-    }
+        // Load related images and other necessary relationships for the response
+        $product->load('product_images'); // Adjust 'images' if your relationship name is different
 
+        return Inertia::location(route('admin.product.index'), [
+            'newProduct' => $product,
+        ]);
+    }
     /**
      * Display the specified resource.
      */
