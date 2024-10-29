@@ -57,7 +57,7 @@ const addNewProduct = async () => {
     Form.append("inStock", fields.inStock);
 
     for (const image of fields.productImages) {
-        Form.append("product_image[]", image.raw);
+        Form.append("product_images[]", image.raw);
     }
 
     Form.append("created_by", fields.created_by);
@@ -68,6 +68,10 @@ const addNewProduct = async () => {
             onSuccess: (page) => {
                 dialogVisible.value = false;
                 toast.success("Successfully Added Product");
+                // Use the returned newProduct data to update the products array
+                if (page.props.newProduct) {
+                    products.value.push(page.props.newProduct);
+                }
             },
         });
     } catch (error) {
