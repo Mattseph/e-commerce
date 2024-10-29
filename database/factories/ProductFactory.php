@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'description' => fake()->realText(),
             'published' => fake()->boolean(),
             'inStock' => fake()->boolean(),
-            'price' => fake()->randomFloat(2, $max=6),
+            'price' => fake()->randomFloat(2, 0, 6),
             'created_by' => fake()->randomElement($user_id),
             'updated_by' => fake()->randomElement($user_id),
         ];

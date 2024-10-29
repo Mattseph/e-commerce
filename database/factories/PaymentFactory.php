@@ -26,7 +26,7 @@ class PaymentFactory extends Factory
 
         return [
             'order_id' => fake()->randomElement($order_id),
-            'amount' => fake()->randomFloat(2),
+            'amount' => fake()->randomFloat(2, 0, 6),
             'status' => fake()->randomElement(['Status 1', 'Status 2']),
             'type' => fake()->randomElement(['Type 1', 'Type 2']),
             'created_by' => fake()->randomElement($user_id),
