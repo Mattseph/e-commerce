@@ -11,7 +11,7 @@ class ProductStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,9 +29,10 @@ class ProductStoreRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:1000'],
             'published' => ['nullable', 'boolean'],
             'inStock' => ['nullable', 'boolean'],
-            'price' => ['required', 'decimal', ],
+            'price' => ['required'],
             'image' => ['nullable', 'string', 'mimes:png,jpg,jpeg,gif'],
-            'created_by' => ['nullable', 'integer'],
+            'created_by' => ['nullable'],
+            'updated_by' => ['nullable'],
         ];
     }
 }
