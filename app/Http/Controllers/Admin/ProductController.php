@@ -55,7 +55,9 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        if ($validated->hasFile('images')) {
+        Debugbar::info($product);
+
+        if ($validated['images']->hasFile('images')) {
             $images = $request->file('images');
 
             foreach ($images as $image) {
