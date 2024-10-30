@@ -24,7 +24,7 @@ class ProductController extends Controller
         $products = Product::select('title', 'category_id', 'brand_id', 'inStock', 'price')->with([
             'category',
             'brand'
-        ])->get();
+        ])->orderBy('id', 'desc')->get();
 
         $brands = Brand::select('id', 'name')->get();
 
@@ -51,7 +51,10 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
+        Debugbar::info($request->file('product_images'));
         $validated = $request->validated();
+
+        Debugbar::info($validated);
 
         $product = Product::create($validated);
 
