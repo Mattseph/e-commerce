@@ -30,7 +30,7 @@ class ProductStoreRequest extends FormRequest
             'published' => ['nullable', 'boolean'],
             'inStock' => ['nullable', 'boolean'],
             'price' => ['required'],
-            'product_images' => ['nullable', 'mimes:png,jpg,jpeg,gif'],
+            'product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
             'created_by' => ['nullable'],
             'updated_by' => ['nullable'],
         ];
