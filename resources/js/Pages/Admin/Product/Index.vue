@@ -23,6 +23,7 @@ const toast = useToast();
 const dialogImageUrl = ref("");
 
 const fields = reactive({
+    id: "",
     title: "",
     price: "",
     quantity: "",
