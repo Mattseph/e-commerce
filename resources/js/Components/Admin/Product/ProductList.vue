@@ -15,15 +15,28 @@ defineProps({
         <td class="px-4 py-3">{{ product.category.name }}</td>
         <td class="px-4 py-3">{{ product.brand.name }}</td>
         <td class="px-4 py-3">
-            <span v-if="product.inStock === 0"
+            <span
+                v-if="product.inStock === 0"
                 class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
                 >Out of Stock</span
             >
-            <span v-else
+            <span
+                v-else
                 class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
                 >In Stock</span
             >
-
+        </td>
+        <td class="px-4 py-3">
+            <span
+                v-if="product.published === 0"
+                class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
+                >Unpublished</span
+            >
+            <span
+                v-else
+                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300"
+                >Published</span
+            >
         </td>
         <td class="px-4 py-3">$ {{ product.price }}</td>
         <td class="px-4 py-3 flex items-center justify-end">
