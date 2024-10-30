@@ -7,6 +7,7 @@ import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import CategoryList from "@/Components/Admin/Product/CategoryList.vue";
+import { Plus } from "@element-plus/icons-vue";
 import { descriptionItemProps } from "element-plus";
 
 const products = usePage().props.products;
@@ -19,17 +20,7 @@ const editModal = ref(false);
 
 const toast = useToast();
 
-const openAddModal = () => {
-    dialogVisible.value = true;
-    addModal.value = true;
-    editModal.value = false;
-};
-
-const openEditModal = (product) => {
-    dialogVisible.value = true;
-    addModal.value = false;
-    editModal.value = true;
-};
+const dialogImageUrl = ref("");
 
 const fields = reactive({
     title: "",
@@ -45,6 +36,34 @@ const fields = reactive({
     updated_by: 1,
 });
 
+const handlePictureCardPreview = (file) => {
+    dialogImageUrl.value = file.url;
+    dialogVisible.value = true;
+};
+
+const handleRemove = (file) => {
+    console.log(file);
+};
+
+const handleFileChange = (file) => {
+    fields.productImages.push(file);
+};
+
+//Opening Modal
+
+const openAddModal = () => {
+    dialogVisible.value = true;
+    addModal.value = true;
+    editModal.value = false;
+};
+
+const openEditModal = (product) => {
+    dialogVisible.value = true;
+    addModal.value = false;
+    editModal.value = true;
+};
+
+
 const addNewProduct = async () => {
     const Form = new FormData();
 
@@ -57,6 +76,7 @@ const addNewProduct = async () => {
     Form.append("inStock", fields.inStock);
 
     for (const image of fields.productImages) {
+        console.log(image.raw);
         Form.append("product_images[]", image.raw);
     }
 
@@ -66,12 +86,13 @@ const addNewProduct = async () => {
     try {
         await router.post("product/", Form, {
             onSuccess: (page) => {
-                dialogVisible.value = false;
                 toast.success("Successfully Added Product");
                 // Use the returned newProduct data to update the products array
                 if (page.props.newProduct) {
                     products.value.push(page.props.newProduct);
                 }
+
+                dialogVisible.value = false;
             },
         });
     } catch (error) {
@@ -88,11 +109,7 @@ onMounted(() => {
     <AdminLayout>
         <Head title="Product List" />
 
-        <el-dialog
-            v-model="dialogVisible"
-            width="500"
-            :before-close="handleClose"
-        >
+        <el-dialog v-model="dialogVisible" width="540">
             <div
                 class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
             >
@@ -101,7 +118,11 @@ onMounted(() => {
                 </h3>
             </div>
 
-            <form class="p-4 md:p-5" @submit.prevent="addNewProduct">
+            <form
+                class="p-4 md:p-5"
+                @submit.prevent="addNewProduct"
+                enctype="multipart/form-data"
+            >
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label
@@ -197,6 +218,21 @@ onMounted(() => {
                         ></textarea>
                     </div>
                 </div>
+
+                <div class="col-span-2 pb-3">
+                    <el-upload
+                        v-model:file-list="fields.productImages"
+                        multiple
+                        :auto-upload="false"
+                        list-type="picture-card"
+                        :on-preview="handlePictureCardPreview"
+                        :on-change="handleFileChange"
+                        :on-remove="handleRemove"
+                    >
+                        <el-icon><Plus /></el-icon>
+                    </el-upload>
+                </div>
+
                 <button
                     type="submit"
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
