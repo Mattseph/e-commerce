@@ -531,6 +531,7 @@ const addNewProduct = async () => {
                                     v-for="product in products"
                                     :key="product.id"
                                     :product="product"
+                                    :editModal="openEditModal"
                                 />
 
                             </tbody>

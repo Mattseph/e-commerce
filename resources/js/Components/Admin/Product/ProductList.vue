@@ -2,6 +2,9 @@
 
 defineProps({
     product: Object,
+    editModal: {
+        type: Function,
+    },
 });
 </script>
 
@@ -75,10 +78,10 @@ defineProps({
                         >
                     </li>
                     <li>
-                        <a
-                            href="#"
+                        <button
+                            @click="editModal"
                             class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Edit</a
+                            >Edit</button
                         >
                     </li>
                 </ul>
