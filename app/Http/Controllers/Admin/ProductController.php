@@ -23,7 +23,8 @@ class ProductController extends Controller
     {
         $products = Product::with([
             'category',
-            'brand'
+            'brand',
+            'product_images',
         ])->orderBy('id', 'desc')->get();
 
         $brands = Brand::select('id', 'name')->get();
