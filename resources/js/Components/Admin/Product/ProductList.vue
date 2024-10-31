@@ -78,10 +78,10 @@ defineProps({
                         >
                     </li>
                     <li>
-                        <button
-                            @click="editModal"
+                        <a
+                            @click="editModal(product)"
                             class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                            >Edit</button
+                            >Edit</a
                         >
                     </li>
                 </ul>
