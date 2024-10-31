@@ -76,7 +76,6 @@ const openEditModal = (product) => {
     fields.category_id = product.category_id;
     fields.brand_id = product.brand_id;
     fields.inStock = product.inStock;
-    fields.product_images = product.product_images;
     fields.productImages = product.productImages;
 };
 
@@ -212,6 +211,7 @@ const addNewProduct = async () => {
                             v-model="fields.category_id"
                             id="category"
                             :categories="categories"
+                            :category_id="fields.category_id"
                         />
                     </div>
 
