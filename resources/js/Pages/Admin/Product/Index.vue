@@ -198,6 +198,7 @@ const addNewProduct = async () => {
                             v-model="fields.brand_id"
                             id="brand"
                             :brands="brands"
+                            :brand_id="fields.brand_id"
                         />
                     </div>
 
