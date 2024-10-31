@@ -76,7 +76,7 @@ const openEditModal = (product) => {
     fields.category_id = product.category_id;
     fields.brand_id = product.brand_id;
     fields.inStock = product.inStock;
-    fields.productImages = product.productImages;
+    fields.product_images = product.product_images;
 };
 
 const addNewProduct = async () => {
@@ -244,6 +244,23 @@ const addNewProduct = async () => {
                     >
                         <el-icon><Plus /></el-icon>
                     </el-upload>
+                </div>
+
+                <div class="flex flex-nowrap pb-3">
+                    <div
+                        v-for="p_image in fields.product_images"
+                        :key="p_image.id"
+                        class="relative w-32 h-32"
+                    >
+                        <img
+                            class="rounded-full w-32 h-32"
+                            :src="`/${p_image.image}`"
+                            alt=""
+                        />
+                        <span
+                            class="bottom-0 left-7 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"
+                        ></span>
+                    </div>
                 </div>
 
                 <button
@@ -534,7 +551,6 @@ const addNewProduct = async () => {
                                     :product="product"
                                     :editModal="openEditModal"
                                 />
-
                             </tbody>
                         </table>
                     </div>
