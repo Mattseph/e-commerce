@@ -7,8 +7,9 @@ import { createApp, h } from "vue";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 
 import ElementPlus from "element-plus";
-import 'element-plus/dist/index.css'
+import "element-plus/dist/index.css";
 
+import "primeicons/primeicons.css";
 import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
