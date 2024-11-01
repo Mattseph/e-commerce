@@ -1,5 +1,4 @@
 <script setup>
-
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
@@ -64,22 +63,6 @@ const openAddModal = () => {
     editModal.value = false;
 };
 
-const openEditModal = (product) => {
-    dialogVisible.value = true;
-    addModal.value = false;
-    editModal.value = true;
-
-    fields.id = product.id;
-    fields.title = product.title;
-    fields.price = product.price;
-    fields.quantity = product.quantity;
-    fields.description = product.description;
-    fields.category_id = product.category_id;
-    fields.brand_id = product.brand_id;
-    fields.inStock = product.inStock;
-    fields.product_images = product.product_images;
-};
-
 const addNewProduct = async () => {
     const Form = new FormData();
 
@@ -115,6 +98,30 @@ const addNewProduct = async () => {
         console.log(error.response || error);
     }
 };
+
+const openEditModal = (product) => {
+    dialogVisible.value = true;
+    addModal.value = false;
+    editModal.value = true;
+
+    fields.id = product.id;
+    fields.title = product.title;
+    fields.price = product.price;
+    fields.quantity = product.quantity;
+    fields.description = product.description;
+    fields.category_id = product.category_id;
+    fields.brand_id = product.brand_id;
+    fields.inStock = product.inStock;
+    fields.product_images = product.product_images;
+
+    // Format existing product images for el-upload
+    fields.productImages = product.product_images.map((image) => ({
+        name: image.image, // Use image name or any unique identifier
+        url: `/${image.image}`, // Full path for image preview
+    }));
+};
+
+const deleteImage = async (p_image, index) => {};
 </script>
 
 <template>
@@ -249,7 +256,7 @@ const addNewProduct = async () => {
 
                 <div class="flex flex-nowrap pb-3">
                     <div
-                        v-for="p_image in fields.product_images"
+                        v-for="(p_image, index) in fields.product_images"
                         :key="p_image.id"
                         class="relative w-32 h-32"
                     >
@@ -260,6 +267,7 @@ const addNewProduct = async () => {
                         />
 
                         <span
+                            @click="deleteImage(p_image, index)"
                             class="top-0 right-0 absolute w-5 h-5 bg-white-400 border-2 border-white dark:border-gray-800 rounded-full hover:scale-110 shadow-md text-center cursor-pointer"
                             ><i class="pi pi-trash"></i>
                         </span>
