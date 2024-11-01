@@ -1,4 +1,5 @@
 <script setup>
+
 import { Head, usePage, router } from "@inertiajs/vue3";
 import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
@@ -257,9 +258,11 @@ const addNewProduct = async () => {
                             :src="`/${p_image.image}`"
                             alt=""
                         />
+
                         <span
-                            class="bottom-0 left-7 absolute w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"
-                        ></span>
+                            class="top-0 right-0 absolute w-5 h-5 bg-white-400 border-2 border-white dark:border-gray-800 rounded-full hover:scale-110 shadow-md text-center cursor-pointer"
+                            ><i class="pi pi-trash"></i>
+                        </span>
                     </div>
                 </div>
 
