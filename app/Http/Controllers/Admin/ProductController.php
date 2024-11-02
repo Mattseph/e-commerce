@@ -67,11 +67,11 @@ class ProductController extends Controller
 
                 $newImgName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
 
-                $image->move('product_images', $newImgName);
+                $image->storeAs('p_images', $newImgName);
 
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image' => 'product_images/' . $newImgName,
+                    'image' => 'p_images/' . $newImgName,
                 ]);
             }
         }
