@@ -117,7 +117,7 @@ const openEditModal = (product) => {
     // Format existing product images for el-upload
     fields.productImages = product.product_images.map((image) => ({
         name: image.image, // Use image name or any unique identifier
-        url: `/${image.image}`, // Full path for image preview
+        url: `../storage/${image.image}`, // Full path for image preview
     }));
 };
 
@@ -254,7 +254,7 @@ const deleteImage = async (p_image, index) => {};
                     </el-upload>
                 </div>
 
-                <div class="flex flex-nowrap pb-3">
+                <!-- <div class="flex flex-nowrap pb-3">
                     <div
                         v-for="(p_image, index) in fields.product_images"
                         :key="p_image.id"
@@ -272,7 +272,7 @@ const deleteImage = async (p_image, index) => {};
                             ><i class="pi pi-trash"></i>
                         </span>
                     </div>
-                </div>
+                </div> -->
 
                 <button
                     type="submit"
