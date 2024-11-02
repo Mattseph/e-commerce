@@ -254,26 +254,6 @@ const deleteImage = async (p_image, index) => {};
                     </el-upload>
                 </div>
 
-                <!-- <div class="flex flex-nowrap pb-3">
-                    <div
-                        v-for="(p_image, index) in fields.product_images"
-                        :key="p_image.id"
-                        class="relative w-32 h-32"
-                    >
-                        <img
-                            class="rounded-full w-32 h-32"
-                            :src="`/${p_image.image}`"
-                            alt=""
-                        />
-
-                        <span
-                            @click="deleteImage(p_image, index)"
-                            class="top-0 right-0 absolute w-5 h-5 bg-white-400 border-2 border-white dark:border-gray-800 rounded-full hover:scale-110 shadow-md text-center cursor-pointer"
-                            ><i class="pi pi-trash"></i>
-                        </span>
-                    </div>
-                </div> -->
-
                 <button
                     type="submit"
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
