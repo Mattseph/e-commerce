@@ -31,8 +31,7 @@ class ProductStoreRequest extends FormRequest
             'inStock' => ['nullable', 'boolean'],
             'price' => ['required'],
             'product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
-            'created_by' => ['nullable'],
-            'updated_by' => ['nullable'],
+            'created_by' => ['nullable', 'integer'],
         ];
     }
 }
