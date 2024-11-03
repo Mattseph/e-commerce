@@ -8,6 +8,7 @@ import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import CategoryList from "@/Components/Admin/Product/CategoryList.vue";
 import Pagination from "@/Components/Admin/Product/Pagination.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { Plus } from "@element-plus/icons-vue";
 import { descriptionItemProps } from "element-plus";
 
@@ -38,7 +39,7 @@ const fields = reactive({
     product_images: [],
     // inStock: 0,
     // published: 0,
-
+    loader: true,
 });
 
 const handlePictureCardPreview = (file) => {
@@ -63,25 +64,25 @@ const openAddModal = () => {
 };
 
 const addNewProduct = async () => {
-    const Form = new FormData();
+    const addForm = new FormData();
 
-    Form.append("category_id", fields.category_id);
-    Form.append("brand_id", fields.brand_id);
-    Form.append("title", fields.title);
-    Form.append("price", fields.price);
-    Form.append("quantity", fields.quantity);
-    Form.append("description", fields.description);
+    addForm.append("category_id", fields.category_id);
+    addForm.append("brand_id", fields.brand_id);
+    addForm.append("title", fields.title);
+    addForm.append("price", fields.price);
+    addForm.append("quantity", fields.quantity);
+    addForm.append("description", fields.description);
 
     for (const image of fields.product_images) {
         console.log(image.raw);
-        Form.append("product_images[]", image.raw);
+        addForm.append("product_images[]", image.raw);
     }
 
-    // Form.append("inStock", fields.inStock);
-    // Form.append("published", fields.published);
+    // addForm.append("inStock", fields.inStock);
+    // addForm.append("published", fields.published);
 
     try {
-        await router.post("product/", Form, {
+        await router.post("product/", addForm, {
             onSuccess: (page) => {
                 toast.success("Successfully Added Product");
                 // Use the returned newProduct data to update the products array
@@ -94,6 +95,8 @@ const addNewProduct = async () => {
         });
     } catch (error) {
         console.log(error.response || error);
+    } finally {
+        fields.loader = false;
     }
 };
 
@@ -117,12 +120,30 @@ const openEditModal = (product) => {
     }));
 };
 
+const updateProduct = async () => {
+    const editForm = FormData();
+
+    editForm.append("category_id", fields.category_id);
+    addForm.append("brand_id", fields.brand_id);
+    addForm.append("title", fields.title);
+    addForm.append("price", fields.price);
+    addForm.append("quantity", fields.quantity);
+    addForm.append("description", fields.description);
+};
+
+if (products) {
+    fields.loader = false;
+}
 </script>
 
 <template>
-    <AdminLayout>
-        <Head title="Product List" />
+    <Head title="Product List" />
 
+    <div v-if="fields.loader" class="flex justify-center items-center h-screen">
+        <PulseLoader :size="`40px`" />
+    </div>
+
+    <AdminLayout v-else>
         <el-dialog v-model="dialogVisible" width="540">
             <div
                 class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
@@ -265,7 +286,7 @@ const openEditModal = (product) => {
                             clip-rule="evenodd"
                         ></path>
                     </svg>
-                    {{editModal? 'Edit Product': 'Add New Product'}}
+                    {{ editModal ? "Edit Product" : "Add New Product" }}
                 </button>
             </form>
             <!-- <template #footer>
