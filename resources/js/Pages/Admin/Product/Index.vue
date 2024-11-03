@@ -110,7 +110,6 @@ const openEditModal = (product) => {
     fields.description = product.description;
     fields.category_id = product.category_id;
     fields.brand_id = product.brand_id;
-    fields.inStock = product.inStock;
     fields.product_images = product.product_images;
 
     // Format existing product images for el-upload
@@ -120,7 +119,6 @@ const openEditModal = (product) => {
     }));
 };
 
-const deleteImage = async (p_image, index) => {};
 </script>
 
 <template>
