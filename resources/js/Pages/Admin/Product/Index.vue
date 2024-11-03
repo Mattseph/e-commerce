@@ -36,7 +36,6 @@ const fields = reactive({
     category_id: "",
     brand_id: "",
     product_images: [],
-    productImages: [],
     // inStock: 0,
     // published: 0,
 
@@ -52,7 +51,7 @@ const handleRemove = (file) => {
 };
 
 const handleFileChange = (file) => {
-    fields.productImages.push(file);
+    fields.product_images.push(file);
 };
 
 //Opening Modal
@@ -73,7 +72,7 @@ const addNewProduct = async () => {
     Form.append("quantity", fields.quantity);
     Form.append("description", fields.description);
 
-    for (const image of fields.productImages) {
+    for (const image of fields.product_images) {
         console.log(image.raw);
         Form.append("product_images[]", image.raw);
     }
@@ -110,10 +109,9 @@ const openEditModal = (product) => {
     fields.description = product.description;
     fields.category_id = product.category_id;
     fields.brand_id = product.brand_id;
-    fields.product_images = product.product_images;
 
     // Format existing product images for el-upload
-    fields.productImages = product.product_images.map((image) => ({
+    fields.product_images = product.product_images.map((image) => ({
         name: image.image, // Use image name or any unique identifier
         url: `../storage/${image.image}`, // Full path for image preview
     }));
@@ -239,7 +237,7 @@ const openEditModal = (product) => {
 
                 <div class="col-span-2 pb-3">
                     <el-upload
-                        v-model:file-list="fields.productImages"
+                        v-model:file-list="fields.product_images"
                         multiple
                         :auto-upload="false"
                         list-type="picture-card"
