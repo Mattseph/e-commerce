@@ -23,8 +23,8 @@ return new class extends Migration
             $table->boolean('published')->default(0);
             $table->boolean('inStock')->default(0);
             $table->decimal('price', 10, 2);
-            $table->foreignId('created_by')->constrained('users')->nullable();
-            $table->foreignId('updated_by')->constrained('users')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users');
+            $table->foreignId('updated_by')->nullable()->constrained('users');
 
             $table->timestamps();
         });
