@@ -265,7 +265,7 @@ const openEditModal = (product) => {
                             clip-rule="evenodd"
                         ></path>
                     </svg>
-                    Add new product
+                    {{editModal? 'Edit Product': 'Add New Product'}}
                 </button>
             </form>
             <!-- <template #footer>
