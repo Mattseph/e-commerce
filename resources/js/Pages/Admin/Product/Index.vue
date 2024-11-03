@@ -35,11 +35,13 @@ const fields = reactive({
     description: "",
     category_id: "",
     brand_id: "",
-    inStock: 0,
     product_images: [],
     productImages: [],
-    created_by: 1,
-    updated_by: 1,
+    // inStock: 0,
+    // published: 0,
+
+    // created_by: 1,
+    // updated_by: 1,
 });
 
 const handlePictureCardPreview = (file) => {
@@ -72,15 +74,16 @@ const addNewProduct = async () => {
     Form.append("price", fields.price);
     Form.append("quantity", fields.quantity);
     Form.append("description", fields.description);
-    Form.append("inStock", fields.inStock);
 
     for (const image of fields.productImages) {
         console.log(image.raw);
         Form.append("product_images[]", image.raw);
     }
 
-    Form.append("created_by", fields.created_by);
-    Form.append("updated_by", fields.updated_by);
+    // Form.append("inStock", fields.inStock);
+    // Form.append("published", fields.published);
+    // Form.append("created_by", fields.created_by);
+    // Form.append("updated_by", fields.updated_by);
 
     try {
         await router.post("product/", Form, {
