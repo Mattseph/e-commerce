@@ -40,8 +40,6 @@ const fields = reactive({
     // inStock: 0,
     // published: 0,
 
-    // created_by: 1,
-    // updated_by: 1,
 });
 
 const handlePictureCardPreview = (file) => {
@@ -82,8 +80,6 @@ const addNewProduct = async () => {
 
     // Form.append("inStock", fields.inStock);
     // Form.append("published", fields.published);
-    // Form.append("created_by", fields.created_by);
-    // Form.append("updated_by", fields.updated_by);
 
     try {
         await router.post("product/", Form, {
