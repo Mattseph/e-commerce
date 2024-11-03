@@ -5,17 +5,19 @@ namespace App\Http\Controllers\Admin;
 use Inertia\Inertia;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Http\Requests\Product\ProductStoreRequest;
-use App\Models\Category;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -52,12 +54,21 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        Debugbar::info($request->file('product_images'));
+        $user_id = Auth::user()->id;
         $validated = $request->validated();
 
         Debugbar::info($validated);
 
-        $product = Product::create($validated);
+        $product = Product::create([
+            'category_id' => $validated['category_id'],
+            'brand_id' => $validated['brand_id'],
+            'title' => $validated['title'],
+            'quantity' => $validated['quantity'],
+            'description' => $validated['description'],
+            'price' => $validated['price'],
+            'created_by' => $user_id,
+            'updated_by' => null
+        ]);
 
         if ($request->hasFile('product_images')) {
             $images = $request->file('product_images');
