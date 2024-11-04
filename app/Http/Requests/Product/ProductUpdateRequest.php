@@ -30,7 +30,8 @@ class ProductUpdateRequest extends FormRequest
             // 'published' => ['nullable', 'boolean'],
             // 'inStock' => ['nullable', 'boolean'],
             'price' => ['required'],
-            'product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
+            'existing_product_images.*' => ['nullable', 'string'],
+            'new_product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
             'updated_by' => ['nullable', 'integer'],
         ];
     }
