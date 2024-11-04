@@ -20,7 +20,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 class ProductController extends Controller
 {
 
-    protected $user_id = Auth::user()->id;
+    protected $user_id;
     /**
      * Display a listing of the resource.
      */
@@ -57,6 +57,11 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
+
+        dd($request);
+        exit;
+        $this->user_id = Auth::id();
+
         $validated = $request->validated();
 
         Debugbar::info($validated);
@@ -87,19 +92,22 @@ class ProductController extends Controller
                 $img_data[] = [
                     'product_id' => $product->id,
                     'image' => 'p_images/' . $newImgName,
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ];
             }
         }
 
         // Insert all image data in one query
-        ProductImage::create($img_data);
+        ProductImage::insert($img_data);
 
         // Load related images and other necessary relationships for the response
         $product->load('product_images'); // Adjust 'images' if your relationship name is different
 
-        return Inertia::location(route('admin.product.index'), [
-            'newProduct' => $product,
-        ]);
+        return Inertia::location(
+            route('admin.product.index'),
+            ['newProduct' => $product],
+        );
     }
     /**
      * Display the specified resource.
@@ -123,7 +131,7 @@ class ProductController extends Controller
     public function update(ProductUpdateRequest $request, string $id)
     {
 
-        Debugbar::info($request->all());
+        $this->user_id = Auth::id();
 
         $validated = $request->validated();
 
@@ -140,66 +148,52 @@ class ProductController extends Controller
 
 
         //Retrieve all of the current product images
-        $existing_product_images = ProductImage::where('product_id', $id)->pluck('image')->toArray();
+        $existing_database_product_images = ProductImage::where('product_id', $id)->pluck('image')->toArray();
 
-        //Get all of the request product images
+        //Get all of the request existing product images
+        $incoming_existing_images = $validated['existing_product_images'] ?? [];
 
+        Debugbar::info($incoming_existing_images);
         //Comapre the current and request product images
 
-        if ($request->hasFile('product_images')) {
-            $incoming_product_images = $request->file('product_images');
+        $images_to_remove = array_diff($existing_database_product_images, $incoming_existing_images);
 
-            // Extract only the original filenames of incoming images for comparison
-            $incoming_image_names = array_map(fn($image) => $image->getClientOriginalName(), $incoming_product_images);
+        if (count($images_to_remove) > 0) {
 
-            $images_to_remove = array_filter($existing_product_images, function ($image) use ($incoming_image_names) {
-                return !in_array(basename($image), $incoming_image_names);
-            });
+            foreach ($images_to_remove as $image) {
 
-            // Determine images to add: incoming images that are not already in the database
-            $images_to_add = array_filter($incoming_product_images, function ($image) use ($existing_product_images) {
-                return !in_array('p_images/' . $image->getClientOriginalName(), $existing_product_images);
-            });
+                //Delete the id of current product images that isn't present on request product images. Both Database and Storage
+                File::delete($image);
 
-
-            if ($images_to_remove > 0) {
-
-                foreach ($images_to_remove as $image) {
-
-                    //Delete the id of current product images that isn't present on request product images. Both Database and Storage
-                    File::delete($image);
-
-                    ProductImage::where(['image' => $image, 'product_id' => $id])->delete();
-                }
-            }
-
-
-            if ($images_to_add > 0) {
-                $new_image_data = [];
-
-                foreach ($images_to_add as $image) {
-                    $new_img_name = time() . '-' . Str::random(10) . '-' . $image->getClientOriginalExtension();
-
-                    $image->storeAs('p_image', $new_img_name);
-
-                    $new_image_data[] = [
-                        'product_id' => $id,
-                        'image' => 'p_images/' . $new_img_name,
-                    ];
-                }
-
-                ProductImage::create($new_image_data);
+                ProductImage::where(['image' => $image, 'product_id' => $id])->delete();
             }
         }
 
 
+        if ($request->hasFile('new_product_images')) {
+            $new_product_images = $request->file('new_product_images');
 
-        //Insert the new product images
+            $new_image_data = [];
+
+            foreach ($new_product_images as $image) {
+                $new_img_name = time() . '-' . Str::random(10) . '-' . $image->getClientOriginalExtension();
+
+                $image->storeAs('p_images', $new_img_name);
+
+                $new_image_data[] = [
+                    'product_id' => $id,
+                    'image' => 'p_images/' . $new_img_name,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            ProductImage::insert($new_image_data);
+        }
 
 
 
-
-
+        return to_route('admin.product.index');
     }
 
     /**

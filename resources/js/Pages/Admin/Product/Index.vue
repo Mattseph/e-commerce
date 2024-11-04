@@ -69,9 +69,8 @@ const handleFileChange = (file) => {
 //Opening Modal
 
 const openAddModal = () => {
-
     resetFormData();
-    
+
     dialogVisible.value = true;
     addModal.value = true;
     editModal.value = false;
@@ -88,7 +87,6 @@ const addNewProduct = async () => {
     addForm.append("description", fields.description);
 
     for (const image of fields.product_images) {
-        console.log(image.raw);
         addForm.append("product_images[]", image.raw);
     }
 
@@ -111,6 +109,8 @@ const addNewProduct = async () => {
     } catch (error) {
         console.log(error.response || error);
     } finally {
+        resetFormData();
+
         fields.loader = false;
     }
 };
@@ -136,7 +136,7 @@ const openEditModal = (product) => {
 };
 
 const updateProduct = async () => {
-    const editForm = FormData();
+    const editForm = new FormData();
 
     editForm.append("category_id", fields.category_id);
     editForm.append("brand_id", fields.brand_id);
@@ -144,24 +144,41 @@ const updateProduct = async () => {
     editForm.append("price", fields.price);
     editForm.append("quantity", fields.quantity);
     editForm.append("description", fields.description);
+
+    const newImages = fields.product_images.filter((image) => image.raw);
+
+    for (const image of newImages) {
+
+        editForm.append("new_product_images[]", image.raw);
+    }
+
+
+    const existingImages = fields.product_images.filter((image) => !image.raw);
+
+    // Append existing image names directly
+    existingImages.forEach((image) => {
+        editForm.append("existing_product_images[]", image.name); // Adjust this if `name` is not the correct identifier
+    });
+
     editForm.append("_method", "PUT");
 
     try {
         fields.loader = true;
         await router.post("product/" + fields.id, editForm, {
             onSuccess: (page) => {
-                toast.success("Successfully Updated Product");
-                // Use the returned newProduct data to update the products array
-                if (page.props.newProduct) {
-                    products.value.push(page.props.newProduct);
-                }
-
                 dialogVisible.value = false;
+                toast.success("Successfully Updated Product");
+
+                router.reload({
+                    preserveScroll: true,
+                    preserveState: true,
+                });
             },
         });
     } catch (error) {
         console.log(error.response || error);
     } finally {
+        resetFormData();
         fields.loader = false;
     }
 };
@@ -190,7 +207,7 @@ if (products) {
 
             <form
                 class="p-4 md:p-5"
-                @submit.prevent="editModal ? updateProduct : addNewProduct"
+                @submit.prevent="editModal ? updateProduct() : addNewProduct()"
                 enctype="multipart/form-data"
             >
                 <div class="grid gap-4 mb-4 grid-cols-2">
