@@ -82,6 +82,7 @@ const addNewProduct = async () => {
     // addForm.append("published", fields.published);
 
     try {
+        fields.loader = true;
         await router.post("product/", addForm, {
             onSuccess: (page) => {
                 toast.success("Successfully Added Product");
@@ -124,11 +125,31 @@ const updateProduct = async () => {
     const editForm = FormData();
 
     editForm.append("category_id", fields.category_id);
-    addForm.append("brand_id", fields.brand_id);
-    addForm.append("title", fields.title);
-    addForm.append("price", fields.price);
-    addForm.append("quantity", fields.quantity);
-    addForm.append("description", fields.description);
+    editForm.append("brand_id", fields.brand_id);
+    editForm.append("title", fields.title);
+    editForm.append("price", fields.price);
+    editForm.append("quantity", fields.quantity);
+    editForm.append("description", fields.description);
+    editForm.append("_method", "PUT");
+
+    try {
+        fields.loader = true;
+        await router.post("product/" + fields.id, editForm, {
+            onSuccess: (page) => {
+                toast.success("Successfully Updated Product");
+                // Use the returned newProduct data to update the products array
+                if (page.props.newProduct) {
+                    products.value.push(page.props.newProduct);
+                }
+
+                dialogVisible.value = false;
+            },
+        });
+    } catch (error) {
+        console.log(error.response || error);
+    } finally {
+        fields.loader = false;
+    }
 };
 
 if (products) {
@@ -155,7 +176,7 @@ if (products) {
 
             <form
                 class="p-4 md:p-5"
-                @submit.prevent="addNewProduct"
+                @submit.prevent="editModal ? editProduct : addNewProduct"
                 enctype="multipart/form-data"
             >
                 <div class="grid gap-4 mb-4 grid-cols-2">
@@ -545,6 +566,9 @@ if (products) {
                                     </th>
                                     <th scope="col" class="px-4 py-3">Brand</th>
                                     <th scope="col" class="px-4 py-3">Stock</th>
+                                    <th scope="col" class="px-4 py-3">
+                                        Published
+                                    </th>
                                     <th scope="col" class="px-4 py-3">Price</th>
                                     <th scope="col" class="px-4 py-3">
                                         <span class="sr-only">Actions</span>
