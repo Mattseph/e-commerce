@@ -16,6 +16,8 @@ onMounted(() => {
     initFlowbite();
 });
 
+const toast = useToast();
+
 const products = usePage().props.products;
 const brands = usePage().props.brands;
 const categories = usePage().props.categories;
@@ -23,8 +25,6 @@ const categories = usePage().props.categories;
 const dialogVisible = ref(false);
 const addModal = ref(false);
 const editModal = ref(false);
-
-const toast = useToast();
 
 const dialogImageUrl = ref("");
 
@@ -41,6 +41,17 @@ const fields = reactive({
     // published: 0,
     loader: true,
 });
+
+const resetFormData = () => {
+    fields.id = "";
+    fields.title = "";
+    fields.price = "";
+    fields.quantity = "";
+    fields.description = "";
+    fields.category_id = "";
+    fields.brand_id = "";
+    fields.product_images = [];
+};
 
 const handlePictureCardPreview = (file) => {
     dialogImageUrl.value = file.url;
