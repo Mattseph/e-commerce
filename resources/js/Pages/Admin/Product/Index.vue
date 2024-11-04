@@ -69,6 +69,9 @@ const handleFileChange = (file) => {
 //Opening Modal
 
 const openAddModal = () => {
+
+    resetFormData();
+    
     dialogVisible.value = true;
     addModal.value = true;
     editModal.value = false;
@@ -187,7 +190,7 @@ if (products) {
 
             <form
                 class="p-4 md:p-5"
-                @submit.prevent="editModal ? editProduct : addNewProduct"
+                @submit.prevent="editModal ? updateProduct : addNewProduct"
                 enctype="multipart/form-data"
             >
                 <div class="grid gap-4 mb-4 grid-cols-2">
