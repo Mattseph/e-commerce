@@ -216,6 +216,20 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        //Delete the image in storage
+        foreach ($product->product_images as $image) {
+            $path = storage_path('app/public/' . $image);
+
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+        }
+        //Delete the image in ProductImage
+
+        $product->product_images()->delete();
+
+        $product->delete();
     }
 }
