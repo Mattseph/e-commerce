@@ -205,8 +205,8 @@ class ProductController extends Controller
 
         $product->load('product_images'); // Assuming there's a `product_images` relationship on the Product model
 
+
         return Inertia::location(route('admin.product.index'), [
-            'success' => true,
             'product' => $product
         ]);
     }
@@ -216,8 +216,10 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+
         $product = Product::findOrFail($id);
         $images = $product->product_images()->pluck('image')->toArray();
+
 
         //Delete the image in storage
         foreach ($images as $image) {
@@ -232,5 +234,9 @@ class ProductController extends Controller
         $product->product_images()->delete();
 
         $product->delete();
+
+        return Inertia::location(route('admin.product.index'), [
+            'product' => $product
+        ]);
     }
 }
