@@ -87,6 +87,7 @@ const addNewProduct = async () => {
     addForm.append("description", fields.description);
 
     for (const image of fields.product_images) {
+        console.log(image.raw);
         addForm.append("product_images[]", image.raw);
     }
 
@@ -95,6 +96,8 @@ const addNewProduct = async () => {
 
     try {
         fields.loader = true;
+        dialogVisible.value = false;
+
         await router.post("product/", addForm, {
             onSuccess: (page) => {
                 toast.success("Successfully Added Product");
@@ -102,8 +105,6 @@ const addNewProduct = async () => {
                 if (page.props.newProduct) {
                     products.value.push(page.props.newProduct);
                 }
-
-                dialogVisible.value = false;
             },
         });
     } catch (error) {
@@ -148,10 +149,8 @@ const updateProduct = async () => {
     const newImages = fields.product_images.filter((image) => image.raw);
 
     for (const image of newImages) {
-
         editForm.append("new_product_images[]", image.raw);
     }
-
 
     const existingImages = fields.product_images.filter((image) => !image.raw);
 
@@ -164,15 +163,14 @@ const updateProduct = async () => {
 
     try {
         fields.loader = true;
+        dialogVisible.value = false;
+        editModal.value = false;
+
         await router.post("product/" + fields.id, editForm, {
             onSuccess: (page) => {
-                dialogVisible.value = false;
                 toast.success("Successfully Updated Product");
 
-                router.reload({
-                    preserveScroll: true,
-                    preserveState: true,
-                });
+                Object.assign(fields, page.data.product);
             },
         });
     } catch (error) {
@@ -181,6 +179,18 @@ const updateProduct = async () => {
         resetFormData();
         fields.loader = false;
     }
+};
+
+const deleteProduct = async (product_id) => {
+    try {
+        await router.delete("product/" + product_id, {
+            onSuccess: (page) => {
+                toast.success("Successfully Deleted Product");
+
+                page.reload();
+            },
+        });
+    } catch (error) {}
 };
 
 if (products) {
@@ -612,6 +622,7 @@ if (products) {
                                     :key="product.id"
                                     :product="product"
                                     :editModal="openEditModal"
+                                    :deleteProduct="deleteProduct"
                                 />
                             </tbody>
                         </table>
