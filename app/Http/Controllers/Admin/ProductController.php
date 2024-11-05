@@ -32,10 +32,9 @@ class ProductController extends Controller
             'product_images',
         ])->orderBy('id', 'desc')->get();
 
-        $brands = Brand::pluck('id', 'name');
+        $brands = Brand::select('id', 'name')->get();
 
-        $categories = Category::pluck('id', 'name');
-
+        $categories = Category::select('id', 'name')->get();
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
