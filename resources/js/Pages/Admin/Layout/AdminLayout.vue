@@ -1,6 +1,6 @@
 <script setup>
-import Header from "@/Pages/Admin/Components/Header.vue";
-import Sidebar from "@/Pages/Admin/Components/Sidebar.vue";
+import Header from "@/Components/Admin/Header.vue";
+import Sidebar from "@/Components/Admin/Sidebar.vue";
 </script>
 
 <template>
