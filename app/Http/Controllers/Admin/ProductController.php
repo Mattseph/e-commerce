@@ -57,8 +57,6 @@ class ProductController extends Controller
     public function store(ProductStoreRequest $request)
     {
 
-        dd($request);
-        exit;
         $this->user_id = Auth::id();
 
         $validated = $request->validated();
@@ -124,6 +122,56 @@ class ProductController extends Controller
         //
     }
 
+
+    private function removeImage($id, array $incoming_existing_product_images)
+    {
+        //Retrieve all of the current product images
+        $existing_database_product_images = ProductImage::where('product_id', $id)->pluck('image')->toArray();
+
+        //Comapre the current and request product images
+
+        $images_to_remove = array_diff($existing_database_product_images, $incoming_existing_product_images);
+
+        if (count($images_to_remove) > 0) {
+
+            foreach ($images_to_remove as $image) {
+
+                //Delete the id of current product images that isn't present on request product images. Both Database and Storage
+
+                if (File::exists(storage_path('app/public/' . $image))) {
+                    File::delete(storage_path('app/public/' . $image));
+                }
+
+                // OR
+                // if (Storage::disk('public')->exists($image)) {
+                //     Storage::disk('public')->delete($image);
+                // }
+
+                ProductImage::where(['image' => $image, 'product_id' => $id])->delete();
+            }
+        }
+    }
+
+    private function insertNewImage($id, array $new_product_images)
+    {
+
+        $new_image_data = [];
+
+        foreach ($new_product_images as $image) {
+            $new_img_name = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+            $image->storeAs('p_images', $new_img_name);
+
+            $new_image_data[] = [
+                'product_id' => $id,
+                'image' => 'p_images/' . $new_img_name,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        ProductImage::insert($new_image_data);
+    }
     /**
      * Update the specified resource in storage.
      */
@@ -134,8 +182,9 @@ class ProductController extends Controller
 
         $validated = $request->validated();
 
+        $product = Product::findOrFail($id);
 
-        Product::where('id', $id)->update([
+        $product->update([
             'category_id' => $validated['category_id'],
             'brand_id' => $validated['brand_id'],
             'title' => $validated['title'],
@@ -146,53 +195,20 @@ class ProductController extends Controller
         ]);
 
 
-        //Retrieve all of the current product images
-        $existing_database_product_images = ProductImage::where('product_id', $id)->pluck('image')->toArray();
+        $this->removeImage($id, $validated['existing_product_images'] ?? []);
 
-        //Get all of the request existing product images
-        $incoming_existing_images = $validated['existing_product_images'] ?? [];
-
-        Debugbar::info($incoming_existing_images);
-        //Comapre the current and request product images
-
-        $images_to_remove = array_diff($existing_database_product_images, $incoming_existing_images);
-
-        if (count($images_to_remove) > 0) {
-
-            foreach ($images_to_remove as $image) {
-
-                //Delete the id of current product images that isn't present on request product images. Both Database and Storage
-                File::delete($image);
-
-                ProductImage::where(['image' => $image, 'product_id' => $id])->delete();
-            }
-        }
 
 
         if ($request->hasFile('new_product_images')) {
-            $new_product_images = $request->file('new_product_images');
-
-            $new_image_data = [];
-
-            foreach ($new_product_images as $image) {
-                $new_img_name = time() . '-' . Str::random(10) . '-' . $image->getClientOriginalExtension();
-
-                $image->storeAs('p_images', $new_img_name);
-
-                $new_image_data[] = [
-                    'product_id' => $id,
-                    'image' => 'p_images/' . $new_img_name,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            ProductImage::insert($new_image_data);
+            $this->insertNewImage($id, $request->file('new_product_images'));
         }
 
+        $product->load('product_images'); // Assuming there's a `images` relationship on the Product model
 
-
-        return to_route('admin.product.index');
+        return Inertia::location(route('admin.product.index'), [
+            'success' => true,
+            'product' => $product
+        ]);
     }
 
     /**
