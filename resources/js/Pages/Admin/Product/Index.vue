@@ -181,13 +181,13 @@ const updateProduct = async () => {
     }
 };
 
-const deleteProduct = async (product_id) => {
+const deleteProduct = async (id) => {
     try {
-        await router.delete("product/" + product_id, {
+        await router.delete(`product/${id}`, {
             onSuccess: (page) => {
                 toast.success("Successfully Deleted Product");
 
-                page.reload();
+                window.location.reload()
             },
         });
     } catch (error) {}
