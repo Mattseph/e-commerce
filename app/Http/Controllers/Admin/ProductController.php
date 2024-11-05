@@ -203,7 +203,7 @@ class ProductController extends Controller
             $this->insertNewImage($id, $request->file('new_product_images'));
         }
 
-        $product->load('product_images'); // Assuming there's a `images` relationship on the Product model
+        $product->load('product_images'); // Assuming there's a `product_images` relationship on the Product model
 
         return Inertia::location(route('admin.product.index'), [
             'success' => true,
@@ -217,9 +217,10 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);
+        $images = $product->product_images()->pluck('image')->toArray();
 
         //Delete the image in storage
-        foreach ($product->product_images as $image) {
+        foreach ($images as $image) {
             $path = storage_path('app/public/' . $image);
 
             if (File::exists($path)) {
