@@ -16,11 +16,14 @@ onMounted(() => {
     initFlowbite();
 });
 
-const toast = useToast();
+const props = defineProps({
+    title: String,
+    products: Object,
+    brands: Object,
+    categories: Object,
+});
 
-const products = usePage().props.products;
-const brands = usePage().props.brands;
-const categories = usePage().props.categories;
+const toast = useToast();
 
 const dialogVisible = ref(false);
 const addModal = ref(false);
@@ -193,7 +196,7 @@ const deleteProduct = async (id) => {
     } catch (error) {}
 };
 
-if (products) {
+if (props.products) {
     fields.loader = false;
 }
 </script>
@@ -283,7 +286,7 @@ if (products) {
                         <BrandList
                             v-model="fields.brand_id"
                             id="brand"
-                            :brands="brands"
+                            :brands="props.brands"
                             :brand_id="fields.brand_id"
                         />
                     </div>
@@ -297,7 +300,7 @@ if (products) {
                         <CategoryList
                             v-model="fields.category_id"
                             id="category"
-                            :categories="categories"
+                            :categories="props.categories"
                             :category_id="fields.category_id"
                         />
                     </div>
@@ -424,7 +427,7 @@ if (products) {
                                         d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                                     />
                                 </svg>
-                                Add product
+                                Add product {{ string }}
                             </button>
                             <div
                                 class="flex items-center space-x-3 w-full md:w-auto"
@@ -618,7 +621,7 @@ if (products) {
                             </thead>
                             <tbody>
                                 <ProductList
-                                    v-for="product in products"
+                                    v-for="product in props.products"
                                     :key="product.id"
                                     :product="product"
                                     :editModal="openEditModal"
