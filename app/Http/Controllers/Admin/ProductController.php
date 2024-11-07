@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Http\Resources\BrandResource;
 use Barryvdh\Debugbar\Facades\Debugbar;
+use App\Http\Resources\CategoryResource;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -35,7 +36,7 @@ class ProductController extends Controller
 
         $brands = BrandResource::collection(Brand::all());
 
-        $categories = Category::select('id', 'name')->get();
+        $categories = CategoryResource::collection(Category::all());
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
