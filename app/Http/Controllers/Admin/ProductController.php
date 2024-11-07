@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use App\Http\Resources\BrandResource;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
@@ -32,7 +33,7 @@ class ProductController extends Controller
             'product_images',
         ])->orderBy('id', 'desc')->get();
 
-        $brands = Brand::select('id', 'name')->get();
+        $brands = BrandResource::collection(Brand::all());
 
         $categories = Category::select('id', 'name')->get();
 
