@@ -105,7 +105,7 @@ const addNewProduct = async () => {
                 toast.success("Successfully Added Product");
                 // Use the returned newProduct data to update the products array
                 if (page.props.newProduct) {
-                    products.value.push(page.props.newProduct);
+                    products.data.push(page.props.newProduct);
                 }
             },
         });
@@ -195,7 +195,7 @@ const deleteProduct = async (id) => {
     } catch (error) {}
 };
 
-if (props.products) {
+if (props.products.data) {
     fields.loader = false;
 }
 </script>
@@ -285,7 +285,7 @@ if (props.products) {
                         <BrandList
                             v-model="fields.brand_id"
                             id="brand"
-                            :brands="props.brands"
+                            :brands="props.brands.data"
                             :brand_id="fields.brand_id"
                         />
                     </div>
@@ -299,7 +299,7 @@ if (props.products) {
                         <CategoryList
                             v-model="fields.category_id"
                             id="category"
-                            :categories="props.categories"
+                            :categories="props.categories.data"
                             :category_id="fields.category_id"
                         />
                     </div>
@@ -620,7 +620,7 @@ if (props.products) {
                             </thead>
                             <tbody>
                                 <ProductList
-                                    v-for="product in props.products"
+                                    v-for="product in props.products.data"
                                     :key="product.id"
                                     :product="product"
                                     :editModal="openEditModal"
