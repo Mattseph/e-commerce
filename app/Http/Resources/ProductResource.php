@@ -20,8 +20,10 @@ class ProductResource extends JsonResource
             'published' => $this->published,
             'inStock' => $this->inStock,
             'price' => $this->price,
+            'brand_avg' => $this->whenAggregated('brand', 'name', 'avg'),
             'category' => CategoryResource::make($this->whenLoaded('category')),
             'brand' => BrandResource::make($this->whenLoaded('brand')),
+            'created_at' => DateTimeResource::make($this->created_at),
         ];
     }
 }
