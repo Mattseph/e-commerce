@@ -22,6 +22,7 @@ const props = defineProps({
     categories: Object,
 });
 
+console.log(props.products);
 const toast = useToast();
 
 const dialogVisible = ref(false);
@@ -630,7 +631,7 @@ if (props.products.data) {
                         </table>
                     </div>
 
-                    <Pagination />
+                    <Pagination :products="props.products"/>
                 </div>
             </div>
         </section>
