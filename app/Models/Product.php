@@ -28,6 +28,8 @@ class Product extends Model
         'updated_by',
     ];
 
+    protected $with = ['category', 'brand'];
+
     public function getSlugOptions() : SlugOptions
     {
         return SlugOptions::create()
