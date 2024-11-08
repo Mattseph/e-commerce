@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use App\Http\Resources\BrandResource;
+use App\Http\Resources\ProductResource;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\Product\ProductStoreRequest;
@@ -28,15 +29,17 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with([
-            'category',
-            'brand',
-            'product_images',
-        ])->orderBy('id', 'desc')->get();
+        $products = ProductResource::collection(Product::orderBy('id', 'desc')->get());
+        Debugbar::info($products);
+        // $products = Product::with([
+        //     'category',
+        //     'brand',
+        //     'product_images',
+        // ])->orderBy('id', 'desc')->get();
 
-        $brands = BrandResource::collection(Brand::all());
+        $brands = BrandResource::collection(Brand::select('id', 'name')->get());
 
-        $categories = CategoryResource::collection(Category::all());
+        $categories = CategoryResource::collection(Category::select('id', 'name')->get());
 
         return Inertia::render('Admin/Product/Index', [
             'products' => $products,
