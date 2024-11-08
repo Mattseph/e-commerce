@@ -29,8 +29,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = ProductResource::collection(Product::orderBy('id', 'desc')->get());
-        Debugbar::info($products);
+        $products = ProductResource::collection(Product::orderBy('id', 'desc')->paginate(2));
+
         // $products = Product::with([
         //     'category',
         //     'brand',
