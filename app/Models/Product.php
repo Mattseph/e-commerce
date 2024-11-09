@@ -28,7 +28,7 @@ class Product extends Model
         'updated_by',
     ];
 
-    protected $with = ['category', 'brand'];
+    protected $with = ['category', 'brand', 'product_images'];
 
     public function getSlugOptions() : SlugOptions
     {
