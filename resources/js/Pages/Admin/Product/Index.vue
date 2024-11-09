@@ -1,5 +1,5 @@
 <script setup>
-import { Head, usePage, router } from "@inertiajs/vue3";
+import { Head, useForm, router } from "@inertiajs/vue3";
 import { onMounted, ref, reactive } from "vue";
 import { initFlowbite } from "flowbite";
 import { useToast } from "vue-toastification";
@@ -31,7 +31,7 @@ const editModal = ref(false);
 const dialogImageUrl = ref("");
 const loader = ref(true);
 
-const fields = reactive({
+const fields = useForm({
     id: "",
     title: "",
     price: "",
