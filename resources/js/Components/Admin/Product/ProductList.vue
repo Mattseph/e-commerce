@@ -76,14 +76,14 @@ defineProps({
                     <li>
                         <a
                             href="#"
-                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            class="block py-2 px-4 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
                             >Show</a
                         >
                     </li>
                     <li>
                         <a
                             @click="editModal(product)"
-                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                            class="block py-2 px-4 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
                             >Edit</a
                         >
                     </li>
@@ -91,7 +91,7 @@ defineProps({
                 <div class="py-1">
                     <a
                         @click="deleteProduct(product.id)"
-                        class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                        class="block py-2 px-4 text-sm text-gray-700 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                         >Delete</a
                     >
                 </div>
