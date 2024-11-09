@@ -34,4 +34,18 @@ class ProductStoreRequest extends FormRequest
             'created_by' => ['nullable', 'integer'],
         ];
     }
+
+    public function attributes()
+    {
+        return [
+
+            'category_id' => 'category',
+            'brand_id' => 'brand',
+            'title' => 'product title',
+            'quantity' => 'product quantity',
+            'description' => 'product description',
+            'price' => 'product price',
+            'new_product_images.*' => 'product images',
+        ];
+    }
 }

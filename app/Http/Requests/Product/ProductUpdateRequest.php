@@ -23,7 +23,7 @@ class ProductUpdateRequest extends FormRequest
     {
         return [
             'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'brand_id' => ['required', 'integer', 'exists:brands,id '],
+            'brand_id' => ['required', 'integer', 'exists:brands,id'],
             'title' => ['required', 'string', 'max:255'],
             'quantity' => ['required', 'integer'],
             'description' => ['nullable', 'string', 'max:1000'],
@@ -33,6 +33,18 @@ class ProductUpdateRequest extends FormRequest
             'existing_product_images.*' => ['nullable', 'string'],
             'new_product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
             'updated_by' => ['nullable', 'integer'],
+        ];
+    }
+
+    public function attributes() {
+        return [
+            'category_id' => 'category',
+            'brand_id' => 'brand',
+            'title' => 'product title',
+            'quantity' => 'product quantity',
+            'description' => 'product description',
+            'price' => 'product price',
+            'new_product_images.*' => 'product images',
         ];
     }
 }
