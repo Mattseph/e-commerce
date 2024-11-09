@@ -7,6 +7,7 @@ import AdminLayout from "../Layout/AdminLayout.vue";
 import ProductList from "@/Components/Admin/Product/ProductList.vue";
 import BrandList from "@/Components/Admin/Product/BrandList.vue";
 import CategoryList from "@/Components/Admin/Product/CategoryList.vue";
+import InputError from "@/Components/InputError.vue";
 import Pagination from "@/Components/Admin/Product/Pagination.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import { Plus } from "@element-plus/icons-vue";
@@ -239,6 +240,11 @@ if (props.products.data) {
                             placeholder="Type product title"
                             required=""
                         />
+
+                        <InputError
+                            class="mt-2"
+                            :message="fields.errors.title"
+                        />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -275,6 +281,11 @@ if (props.products.data) {
                             placeholder="$2999"
                             required=""
                         />
+
+                        <InputError
+                            class="mt-2"
+                            :message="fields.errors.quantity"
+                        />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -288,6 +299,11 @@ if (props.products.data) {
                             id="brand"
                             :brands="props.brands.data"
                         />
+
+                        <InputError
+                            class="mt-2"
+                            :message="fields.errors.brand_id"
+                        />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -300,6 +316,11 @@ if (props.products.data) {
                             v-model="fields.category_id"
                             id="category"
                             :categories="props.categories.data"
+                        />
+
+                        <InputError
+                            class="mt-2"
+                            :message="fields.errors.category_id"
                         />
                     </div>
 
@@ -316,6 +337,11 @@ if (props.products.data) {
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Write product description here"
                         ></textarea>
+
+                        <InputError
+                            class="mt-2"
+                            :message="fields.errors.description"
+                        />
                     </div>
                 </div>
 
@@ -331,6 +357,11 @@ if (props.products.data) {
                     >
                         <el-icon><Plus /></el-icon>
                     </el-upload>
+
+                    <InputError
+                        class="mt-2"
+                        :message="fields.errors.product_images"
+                    />
                 </div>
 
                 <button
