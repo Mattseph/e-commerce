@@ -120,6 +120,7 @@ const addNewProduct = async () => {
 };
 
 const openEditModal = (product) => {
+    console.log(product);
     dialogVisible.value = true;
     addModal.value = false;
     editModal.value = true;
@@ -129,8 +130,8 @@ const openEditModal = (product) => {
     fields.price = product.price;
     fields.quantity = product.quantity;
     fields.description = product.description;
-    fields.category_id = product.category_id;
-    fields.brand_id = product.brand_id;
+    fields.category_id = product.category.id;
+    fields.brand_id = product.brand.id;
 
     // Format existing product images for el-upload
     fields.product_images = product.product_images.map((image) => ({
@@ -287,7 +288,6 @@ if (props.products.data) {
                             v-model="fields.brand_id"
                             id="brand"
                             :brands="props.brands.data"
-                            :brand_id="fields.brand_id"
                         />
                     </div>
 
