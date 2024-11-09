@@ -22,7 +22,6 @@ const props = defineProps({
     categories: Object,
 });
 
-console.log(props.products);
 const toast = useToast();
 
 const dialogVisible = ref(false);
@@ -30,6 +29,7 @@ const addModal = ref(false);
 const editModal = ref(false);
 
 const dialogImageUrl = ref("");
+const loader = ref(true);
 
 const fields = reactive({
     id: "",
@@ -42,7 +42,6 @@ const fields = reactive({
     product_images: [],
     // inStock: 0,
     // published: 0,
-    loader: true,
 });
 
 const resetFormData = () => {
@@ -98,7 +97,7 @@ const addNewProduct = async () => {
     // addForm.append("published", fields.published);
 
     try {
-        fields.loader = true;
+        loader.value = true;
         dialogVisible.value = false;
 
         await router.post("product/", addForm, {
@@ -115,7 +114,7 @@ const addNewProduct = async () => {
     } finally {
         resetFormData();
 
-        fields.loader = false;
+        loader.value = false;
     }
 };
 
@@ -166,7 +165,7 @@ const updateProduct = async () => {
     editForm.append("_method", "PUT");
 
     try {
-        fields.loader = true;
+        loader.value = true;
         dialogVisible.value = false;
         editModal.value = false;
 
@@ -181,7 +180,7 @@ const updateProduct = async () => {
         console.log(error.response || error);
     } finally {
         resetFormData();
-        fields.loader = false;
+        loader.value = false;
     }
 };
 
@@ -191,21 +190,21 @@ const deleteProduct = async (id) => {
             onSuccess: (page) => {
                 toast.success("Successfully Deleted Product");
 
-                window.location.reload()
+                window.location.reload();
             },
         });
     } catch (error) {}
 };
 
 if (props.products.data) {
-    fields.loader = false;
+    loader.value = false;
 }
 </script>
 
 <template>
     <Head title="Product List" />
 
-    <div v-if="fields.loader" class="flex justify-center items-center h-screen">
+    <div v-if="loader.value" class="flex justify-center items-center h-screen">
         <PulseLoader :size="`40px`" />
     </div>
 
@@ -301,7 +300,6 @@ if (props.products.data) {
                             v-model="fields.category_id"
                             id="category"
                             :categories="props.categories.data"
-                            :category_id="fields.category_id"
                         />
                     </div>
 
@@ -631,7 +629,7 @@ if (props.products.data) {
                         </table>
                     </div>
 
-                    <Pagination :products="props.products"/>
+                    <Pagination :products="props.products" />
                 </div>
             </div>
         </section>
