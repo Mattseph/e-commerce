@@ -22,8 +22,8 @@ class ProductStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => ['required', 'integer'],
-            'brand_id' => ['required', 'integer'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'brand_id' => ['required', 'integer', 'exists:brands,id'],
             'title' => ['required', 'string', 'max:255'],
             'quantity' => ['required', 'integer'],
             'description' => ['nullable', 'string', 'max:1000'],
