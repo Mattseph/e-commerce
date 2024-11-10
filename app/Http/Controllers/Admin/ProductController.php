@@ -81,6 +81,7 @@ class ProductController extends Controller
 
         $img_data = [];
 
+
         if ($request->hasFile('product_images')) {
             $images = $request->file('product_images');
 
@@ -103,13 +104,7 @@ class ProductController extends Controller
         // Insert all image data in one query
         ProductImage::insert($img_data);
 
-        // Load related images and other necessary relationships for the response
-        $product->load('product_images'); // Adjust 'images' if your relationship name is different
-
-        return Inertia::location(
-            route('admin.product.index'),
-            ['newProduct' => $product],
-        );
+        return to_route('admin.product.index');
     }
     /**
      * Display the specified resource.
@@ -177,17 +172,17 @@ class ProductController extends Controller
 
         ProductImage::insert($new_image_data);
     }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request, string $id)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
 
         $this->user_id = Auth::id();
 
         $validated = $request->validated();
 
-        $product = Product::findOrFail($id);
 
         $product->update([
             'category_id' => $validated['category_id'],
@@ -200,31 +195,24 @@ class ProductController extends Controller
         ]);
 
 
-        $this->removeImage($id, $validated['existing_product_images'] ?? []);
+        $this->removeImage($product->id, $validated['existing_product_images'] ?? []);
 
 
 
         if ($request->hasFile('new_product_images')) {
-            $this->insertNewImage($id, $request->file('new_product_images'));
+            $this->insertNewImage($product->id, $request->file('new_product_images'));
         }
 
-        $product->load('product_images'); // Assuming there's a `product_images` relationship on the Product model
-
-
-        return Inertia::location(route('admin.product.index'), [
-            'product' => $product
-        ]);
+        return to_route('admin.product.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Product $product)
     {
 
-        $product = Product::findOrFail($id);
         $images = $product->product_images()->pluck('image')->toArray();
-
 
         //Delete the image in storage
         foreach ($images as $image) {
@@ -240,8 +228,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return Inertia::location(route('admin.product.index'), [
-            'product' => $product
-        ]);
+        return to_route('admin.product.index');
     }
 }
