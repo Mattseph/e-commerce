@@ -32,7 +32,7 @@ const editModal = ref(false);
 const dialogImageUrl = ref("");
 const loader = ref(true);
 
-const fields = useForm({
+const form = useForm({
     id: "",
     title: "",
     price: "",
@@ -45,17 +45,6 @@ const fields = useForm({
     // published: 0,
 });
 
-const resetFormData = () => {
-    fields.id = "";
-    fields.title = "";
-    fields.price = "";
-    fields.quantity = "";
-    fields.description = "";
-    fields.category_id = "";
-    fields.brand_id = "";
-    fields.product_images = [];
-};
-
 const handlePictureCardPreview = (file) => {
     dialogImageUrl.value = file.url;
     dialogVisible.value = true;
@@ -66,13 +55,13 @@ const handleRemove = (file) => {
 };
 
 const handleFileChange = (file) => {
-    fields.product_images.push(file);
+    form.product_images.push(file);
 };
 
 //Opening Modal
 
 const openAddModal = () => {
-    resetFormData();
+    form.reset();
 
     dialogVisible.value = true;
     addModal.value = true;
@@ -80,41 +69,37 @@ const openAddModal = () => {
 };
 
 const addNewProduct = async () => {
-    const addForm = new FormData();
+    // const addForm = new FormData();
 
-    addForm.append("category_id", fields.category_id);
-    addForm.append("brand_id", fields.brand_id);
-    addForm.append("title", fields.title);
-    addForm.append("price", fields.price);
-    addForm.append("quantity", fields.quantity);
-    addForm.append("description", fields.description);
+    // addForm.append("category_id", form.category_id);
+    // addForm.append("brand_id", form.brand_id);
+    // addForm.append("title", form.title);
+    // addForm.append("price", form.price);
+    // addForm.append("quantity", form.quantity);
+    // addForm.append("description", form.description);
 
-    for (const image of fields.product_images) {
-        console.log(image.raw);
-        addForm.append("product_images[]", image.raw);
-    }
+    // for (const image of form.product_images) {
+    //     console.log(image.raw);
+    //     form.append("product_images[]", image.raw);
 
-    // addForm.append("inStock", fields.inStock);
-    // addForm.append("published", fields.published);
+    // }
+
+    // addForm.append("inStock", form.inStock);
+    // addForm.append("published", form.published);
 
     try {
         loader.value = true;
-        dialogVisible.value = false;
 
-        await router.post("product/", addForm, {
-            onSuccess: (page) => {
+        await form.post(route("admin.product.store"), {
+            onSuccess: () => {
+                dialogVisible.value = false;
                 toast.success("Successfully Added Product");
-                // Use the returned newProduct data to update the products array
-                if (page.props.newProduct) {
-                    products.data.push(page.props.newProduct);
-                }
+                form.reset();
             },
         });
     } catch (error) {
         console.log(error.response || error);
     } finally {
-        resetFormData();
-
         loader.value = false;
     }
 };
@@ -125,16 +110,16 @@ const openEditModal = (product) => {
     addModal.value = false;
     editModal.value = true;
 
-    fields.id = product.id;
-    fields.title = product.title;
-    fields.price = product.price;
-    fields.quantity = product.quantity;
-    fields.description = product.description;
-    fields.category_id = product.category.id;
-    fields.brand_id = product.brand.id;
+    form.id = product.id;
+    form.title = product.title;
+    form.price = product.price;
+    form.quantity = product.quantity;
+    form.description = product.description;
+    form.category_id = product.category.id;
+    form.brand_id = product.brand.id;
 
     // Format existing product images for el-upload
-    fields.product_images = product.product_images.map((image) => ({
+    form.product_images = product.product_images.map((image) => ({
         name: image.image, // Use image name or any unique identifier
         url: `../storage/${image.image}`, // Full path for image preview
     }));
@@ -143,20 +128,20 @@ const openEditModal = (product) => {
 const updateProduct = async () => {
     const editForm = new FormData();
 
-    editForm.append("category_id", fields.category_id);
-    editForm.append("brand_id", fields.brand_id);
-    editForm.append("title", fields.title);
-    editForm.append("price", fields.price);
-    editForm.append("quantity", fields.quantity);
-    editForm.append("description", fields.description);
+    editForm.append("category_id", form.category_id);
+    editForm.append("brand_id", form.brand_id);
+    editForm.append("title", form.title);
+    editForm.append("price", form.price);
+    editForm.append("quantity", form.quantity);
+    editForm.append("description", form.description);
 
-    const newImages = fields.product_images.filter((image) => image.raw);
+    const newImages = form.product_images.filter((image) => image.raw);
 
     for (const image of newImages) {
         editForm.append("new_product_images[]", image.raw);
     }
 
-    const existingImages = fields.product_images.filter((image) => !image.raw);
+    const existingImages = form.product_images.filter((image) => !image.raw);
 
     // Append existing image names directly
     existingImages.forEach((image) => {
@@ -170,17 +155,16 @@ const updateProduct = async () => {
         dialogVisible.value = false;
         editModal.value = false;
 
-        await router.post("product/" + fields.id, editForm, {
+        await router.post("product/" + form.id, editForm, {
             onSuccess: (page) => {
                 toast.success("Successfully Updated Product");
 
-                Object.assign(fields, page.data.product);
+                Object.assign(form, page.data.product);
             },
         });
     } catch (error) {
         console.log(error.response || error);
     } finally {
-        resetFormData();
         loader.value = false;
     }
 };
@@ -232,7 +216,7 @@ if (props.products.data) {
                             >Title</label
                         >
                         <input
-                            v-model="fields.title"
+                            v-model="form.title"
                             type="text"
                             name="title"
                             id="title"
@@ -241,10 +225,7 @@ if (props.products.data) {
                             required=""
                         />
 
-                        <InputError
-                            class="mt-2"
-                            :message="fields.errors.title"
-                        />
+                        <InputError class="mt-2" :message="form.errors.title" />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -254,7 +235,7 @@ if (props.products.data) {
                             >Quantity</label
                         >
                         <input
-                            v-model="fields.quantity"
+                            v-model="form.quantity"
                             type="number"
                             name="quantity"
                             id="quantity"
@@ -272,7 +253,7 @@ if (props.products.data) {
                             >Price</label
                         >
                         <input
-                            v-model="fields.price"
+                            v-model="form.price"
                             type="number"
                             name="price"
                             id="price"
@@ -284,7 +265,7 @@ if (props.products.data) {
 
                         <InputError
                             class="mt-2"
-                            :message="fields.errors.quantity"
+                            :message="form.errors.quantity"
                         />
                     </div>
 
@@ -295,14 +276,14 @@ if (props.products.data) {
                             >Brand</label
                         >
                         <BrandList
-                            v-model="fields.brand_id"
+                            v-model="form.brand_id"
                             id="brand"
                             :brands="props.brands.data"
                         />
 
                         <InputError
                             class="mt-2"
-                            :message="fields.errors.brand_id"
+                            :message="form.errors.brand_id"
                         />
                     </div>
 
@@ -313,14 +294,14 @@ if (props.products.data) {
                             >Category</label
                         >
                         <CategoryList
-                            v-model="fields.category_id"
+                            v-model="form.category_id"
                             id="category"
                             :categories="props.categories.data"
                         />
 
                         <InputError
                             class="mt-2"
-                            :message="fields.errors.category_id"
+                            :message="form.errors.category_id"
                         />
                     </div>
 
@@ -331,7 +312,7 @@ if (props.products.data) {
                             >Product Description</label
                         >
                         <textarea
-                            v-model="fields.description"
+                            v-model="form.description"
                             id="description"
                             rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -340,14 +321,14 @@ if (props.products.data) {
 
                         <InputError
                             class="mt-2"
-                            :message="fields.errors.description"
+                            :message="form.errors.description"
                         />
                     </div>
                 </div>
 
                 <div class="col-span-2 pb-3">
                     <el-upload
-                        v-model:file-list="fields.product_images"
+                        v-model:file-list="form.product_images"
                         multiple
                         :auto-upload="false"
                         list-type="picture-card"
@@ -360,11 +341,12 @@ if (props.products.data) {
 
                     <InputError
                         class="mt-2"
-                        :message="fields.errors.product_images"
+                        :message="form.errors.product_images"
                     />
                 </div>
 
                 <button
+                    :disabled="form.processing"
                     type="submit"
                     class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
