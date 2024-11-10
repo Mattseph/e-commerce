@@ -54,9 +54,10 @@ const handleRemove = (file) => {
     console.log(file);
 };
 
-const handleFileChange = (file) => {
-    form.product_images.push(file);
+const handleFileChange = (file, fileList) => {
+    form.product_images = fileList.map(image => image.raw);
 };
+
 
 //Opening Modal
 
