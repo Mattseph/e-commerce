@@ -82,23 +82,21 @@ class ProductController extends Controller
         $img_data = [];
 
 
-        if ($request->hasFile('product_images')) {
-            $images = $request->file('product_images');
+        $images = $request->file('product_images');
 
-            foreach ($images as $image) {
-                // Generate Unique Image Name
+        foreach ($images as $image) {
+            // Generate Unique Image Name
 
-                $newImgName = time() . '-' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+            $newImgName = time() . '-' . Str::random(10) . '.' . $image['raw']->getClientOriginalExtension();
 
-                $image->storeAs('p_images', $newImgName);
+            $image['raw']->storeAs('p_images', $newImgName);
 
-                $img_data[] = [
-                    'product_id' => $product->id,
-                    'image' => 'p_images/' . $newImgName,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
+            $img_data[] = [
+                'product_id' => $product->id,
+                'image' => 'p_images/' . $newImgName,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
 
         // Insert all image data in one query
