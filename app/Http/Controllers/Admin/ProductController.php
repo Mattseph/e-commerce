@@ -27,15 +27,13 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = ProductResource::collection(Product::orderBy('id', 'desc')->paginate(2));
+        $query = Product::query();
 
-        // $products = Product::with([
-        //     'category',
-        //     'brand',
-        //     'product_images',
-        // ])->orderBy('id', 'desc')->get();
+        $this->applySearch($query, $request->search);
+
+        $products = ProductResource::collection($query->orderBy('id', 'desc')->paginate(10));
 
         $brands = BrandResource::collection(Brand::select('id', 'name')->get());
 
@@ -45,7 +43,14 @@ class ProductController extends Controller
             'products' => $products,
             'brands' => $brands,
             'categories' => $categories,
+            'search' => $request->search,
         ]);
+    }
+
+    protected function applySearch ($query, $search) {
+        return $query->when($search, function ($query, $search) {
+            $query->where('title', 'like', '%' . $search . '%');
+        });
     }
 
     /**

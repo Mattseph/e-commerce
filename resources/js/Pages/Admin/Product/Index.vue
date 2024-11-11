@@ -1,6 +1,6 @@
 <script setup>
 import { Head, useForm, router } from "@inertiajs/vue3";
-import { onMounted, ref, reactive } from "vue";
+import { onMounted, ref, reactive, computed, watch } from "vue";
 import { initFlowbite } from "flowbite";
 import { useToast } from "vue-toastification";
 import AdminLayout from "../Layout/AdminLayout.vue";
@@ -21,6 +21,7 @@ const props = defineProps({
     products: Object,
     brands: Object,
     categories: Object,
+    search: String,
 });
 
 const toast = useToast();
@@ -151,7 +152,7 @@ const updateProduct = async () => {
 
 const deleteProduct = async (id) => {
     try {
-        await form.delete(route('admin.product.destroy', id), {
+        await form.delete(route("admin.product.destroy", id), {
             onSuccess: () => {
                 toast.success("Successfully Deleted Product");
             },
@@ -162,6 +163,27 @@ const deleteProduct = async (id) => {
 if (props.products.data) {
     loader.value = false;
 }
+
+let pageNumber = ref(1),
+    search = ref(props.search);
+
+const studentUrl = computed(() => {
+    let url = new URL(route("admin.product.index"));
+    url.searchParams.append("page", pageNumber.value);
+    url.searchParams.append("search", search.value);
+    return url;
+});
+
+watch(
+    () => studentUrl.value,
+    (newUrl) => {
+        router.visit(newUrl, {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true
+        });
+    }
+);
 </script>
 
 <template>
@@ -387,6 +409,7 @@ if (props.products.data) {
                                         </svg>
                                     </div>
                                     <input
+                                        v-model="search"
                                         type="text"
                                         id="simple-search"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
