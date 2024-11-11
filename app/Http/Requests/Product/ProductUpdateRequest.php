@@ -27,11 +27,9 @@ class ProductUpdateRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'quantity' => ['required', 'integer'],
             'description' => ['nullable', 'string', 'max:1000'],
-            // 'published' => ['nullable', 'boolean'],
-            // 'inStock' => ['nullable', 'boolean'],
             'price' => ['required'],
             'existing_product_images.*' => ['nullable', 'string'],
-            'new_product_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,gif'],
+            'new_product_images.*' => ['nullable', 'file', 'mimes:png,jpg,jpeg,gif'],
             'updated_by' => ['nullable', 'integer'],
         ];
     }
