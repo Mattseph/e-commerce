@@ -10,6 +10,8 @@ const props = defineProps({
         type: Function,
     },
 });
+
+
 </script>
 
 <template>
@@ -83,7 +85,7 @@ const props = defineProps({
                     </li>
                     <li>
                         <a
-                            @click="editModal(props.product)"
+                            @click="props.editModal(props.product)"
                             class="block py-2 px-4 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
                             >Edit</a
                         >
@@ -91,7 +93,7 @@ const props = defineProps({
                 </ul>
                 <div class="py-1">
                     <a
-                        @click="deleteProduct(props.product.id)"
+                        @click="props.deleteProduct(props.product.id)"
                         class="block py-2 px-4 text-sm text-gray-700 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                         >Delete</a
                     >
