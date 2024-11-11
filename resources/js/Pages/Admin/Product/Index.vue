@@ -41,6 +41,8 @@ const form = useForm({
     category_id: "",
     brand_id: "",
     product_images: [],
+    new_product_images: [],
+    existing_product_images: [],
     // inStock: 0,
     // published: 0,
 });
@@ -55,9 +57,8 @@ const handleRemove = (file) => {
 };
 
 const handleFileChange = (file, fileList) => {
-    form.product_images = fileList.map(image => image.raw);
+    form.product_images.push(file);
 };
-
 
 //Opening Modal
 
@@ -70,24 +71,6 @@ const openAddModal = () => {
 };
 
 const addNewProduct = async () => {
-    // const addForm = new FormData();
-
-    // addForm.append("category_id", form.category_id);
-    // addForm.append("brand_id", form.brand_id);
-    // addForm.append("title", form.title);
-    // addForm.append("price", form.price);
-    // addForm.append("quantity", form.quantity);
-    // addForm.append("description", form.description);
-
-    // for (const image of form.product_images) {
-    //     console.log(image.raw);
-    //     form.append("product_images[]", image.raw);
-
-    // }
-
-    // addForm.append("inStock", form.inStock);
-    // addForm.append("published", form.published);
-
     try {
         loader.value = true;
 
@@ -106,7 +89,6 @@ const addNewProduct = async () => {
 };
 
 const openEditModal = (product) => {
-    console.log(product);
     dialogVisible.value = true;
     addModal.value = false;
     editModal.value = true;
@@ -125,7 +107,6 @@ const openEditModal = (product) => {
         url: `../storage/${image.image}`, // Full path for image preview
     }));
 };
-
 const updateProduct = async () => {
     const editForm = new FormData();
 
@@ -153,20 +134,18 @@ const updateProduct = async () => {
 
     try {
         loader.value = true;
-        dialogVisible.value = false;
-        editModal.value = false;
 
         await router.post("product/" + form.id, editForm, {
-            onSuccess: (page) => {
+            onSuccess: () => {
                 toast.success("Successfully Updated Product");
-
-                Object.assign(form, page.data.product);
+                dialogVisible.value = false;
+                editModal.value = false;
+                fields.loader = false;
+                form.reset();
             },
         });
     } catch (error) {
         console.log(error.response || error);
-    } finally {
-        loader.value = false;
     }
 };
 
@@ -245,6 +224,10 @@ if (props.products.data) {
                             placeholder="$2999"
                             required=""
                         />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.quantity"
+                        />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
@@ -264,10 +247,7 @@ if (props.products.data) {
                             required=""
                         />
 
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.quantity"
-                        />
+                        <InputError class="mt-2" :message="form.errors.price" />
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
