@@ -1,6 +1,7 @@
 <script setup>
-defineProps({
+const props = defineProps({
     product: Object,
+
     editModal: {
         type: Function,
     },
@@ -17,13 +18,13 @@ defineProps({
             scope="row"
             class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
         >
-            {{ product.title }}
+            {{ props.product.title }}
         </th>
-        <td class="px-4 py-3">{{ product.category.name }}</td>
-        <td class="px-4 py-3">{{ product.brand.name }}</td>
+        <td class="px-4 py-3">{{ props.product.category.name }}</td>
+        <td class="px-4 py-3">{{ props.product.brand.name }}</td>
         <td class="px-4 py-3">
             <span
-                v-if="product.inStock === 0"
+                v-if="props.product.inStock === 0"
                 class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
                 >Out of Stock</span
             >
@@ -35,7 +36,7 @@ defineProps({
         </td>
         <td class="px-4 py-3">
             <span
-                v-if="product.published === 0"
+                v-if="props.product.published === 0"
                 class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300"
                 >Unpublished</span
             >
@@ -45,11 +46,11 @@ defineProps({
                 >Published</span
             >
         </td>
-        <td class="px-4 py-3">$ {{ product.price }}</td>
+        <td class="px-4 py-3">$ {{ props.product.price }}</td>
         <td class="px-4 py-3 flex items-center justify-end">
             <button
-                :id="`${product.id}-button`"
-                :data-dropdown-toggle="product.id"
+                :id="`${props.product.id}-button`"
+                :data-dropdown-toggle="props.product.id"
                 class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
                 type="button"
             >
@@ -66,12 +67,12 @@ defineProps({
                 </svg>
             </button>
             <div
-                :id="product.id"
+                :id="props.product.id"
                 class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
             >
                 <ul
                     class="py-1 text-sm text-gray-700 dark:text-gray-200"
-                    :aria-labelledby="`${product.id}-button`"
+                    :aria-labelledby="`${props.product.id}-button`"
                 >
                     <li>
                         <a
@@ -82,7 +83,7 @@ defineProps({
                     </li>
                     <li>
                         <a
-                            @click="editModal(product)"
+                            @click="editModal(props.product)"
                             class="block py-2 px-4 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
                             >Edit</a
                         >
@@ -90,7 +91,7 @@ defineProps({
                 </ul>
                 <div class="py-1">
                     <a
-                        @click="deleteProduct(product.id)"
+                        @click="deleteProduct(props.product.id)"
                         class="block py-2 px-4 text-sm text-gray-700 hover:bg-orange-500 hover:text-white hover:cursor-pointer dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                         >Delete</a
                     >
