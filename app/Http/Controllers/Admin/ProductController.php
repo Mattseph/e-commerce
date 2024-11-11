@@ -82,7 +82,7 @@ class ProductController extends Controller
         $img_data = [];
 
 
-        $images = $request->file('product_images');
+        $images = $request->file('new_product_images');
 
         foreach ($images as $image) {
             // Generate Unique Image Name
@@ -181,7 +181,6 @@ class ProductController extends Controller
 
         $validated = $request->validated();
 
-
         $product->update([
             'category_id' => $validated['category_id'],
             'brand_id' => $validated['brand_id'],
@@ -194,7 +193,6 @@ class ProductController extends Controller
 
 
         $this->removeImage($product->id, $validated['existing_product_images'] ?? []);
-
 
 
         if ($request->hasFile('new_product_images')) {
