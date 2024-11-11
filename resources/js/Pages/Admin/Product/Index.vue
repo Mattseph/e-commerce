@@ -140,7 +140,7 @@ const updateProduct = async () => {
                 toast.success("Successfully Updated Product");
                 dialogVisible.value = false;
                 editModal.value = false;
-                fields.loader = false;
+                loader.value = false;
                 form.reset();
             },
         });
@@ -151,11 +151,9 @@ const updateProduct = async () => {
 
 const deleteProduct = async (id) => {
     try {
-        await router.delete(`product/${id}`, {
-            onSuccess: (page) => {
+        await form.delete(route('admin.product.destroy', id), {
+            onSuccess: () => {
                 toast.success("Successfully Deleted Product");
-
-                window.location.reload();
             },
         });
     } catch (error) {}
