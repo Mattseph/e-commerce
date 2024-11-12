@@ -172,25 +172,31 @@ const studentUrl = computed(() => {
     url.searchParams.append("page", pageNumber.value);
 
     if (search.value) {
-
         url.searchParams.append("search", search.value);
     }
-    
+
     return url;
 });
 
-
 const updatePageNumber = (link) => {
     pageNumber.value = link.url.split("=")[1];
-}
+};
 
+watch(
+    () => search.value,
+    (value) => {
+        if (value) {
+            pageNumber.value = 1;
+        }
+    }
+);
 watch(
     () => studentUrl.value,
     (newUrl) => {
         router.visit(newUrl, {
             preserveScroll: true,
             preserveState: true,
-            replace: true
+            replace: true,
         });
     }
 );
@@ -654,7 +660,10 @@ watch(
                         </table>
                     </div>
 
-                    <Pagination :products="props.products" :updatePageNumber="updatePageNumber"/>
+                    <Pagination
+                        :products="props.products"
+                        :updatePageNumber="updatePageNumber"
+                    />
                 </div>
             </div>
         </section>
