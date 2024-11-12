@@ -152,11 +152,13 @@ const updateProduct = async () => {
 
 const deleteProduct = async (id) => {
     try {
-        await form.delete(route("admin.product.destroy", id), {
-            onSuccess: () => {
-                toast.success("Successfully Deleted Product");
-            },
-        });
+        if (confirm("Are you sure you want to delete this product")) {
+            await form.delete(route("admin.product.destroy", id), {
+                onSuccess: () => {
+                    toast.success("Successfully Deleted Product");
+                },
+            });
+        }
     } catch (error) {}
 };
 
