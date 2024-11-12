@@ -170,9 +170,19 @@ let pageNumber = ref(1),
 const studentUrl = computed(() => {
     let url = new URL(route("admin.product.index"));
     url.searchParams.append("page", pageNumber.value);
-    url.searchParams.append("search", search.value);
+
+    if (search.value) {
+
+        url.searchParams.append("search", search.value);
+    }
+    
     return url;
 });
+
+
+const updatePageNumber = (link) => {
+    pageNumber.value = link.url.split("=")[1];
+}
 
 watch(
     () => studentUrl.value,
@@ -644,7 +654,7 @@ watch(
                         </table>
                     </div>
 
-                    <Pagination :products="props.products" />
+                    <Pagination :products="props.products" :updatePageNumber="updatePageNumber"/>
                 </div>
             </div>
         </section>
