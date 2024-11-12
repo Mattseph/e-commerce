@@ -6,15 +6,12 @@ defineProps({
         type: Object,
         required: true,
     },
+    updatePageNumber: {
+        type: Function,
+        required: true,
+    }
 });
 
-const updatePaginationNumber = (link) => {
-    let pageNumber = link.url.split("=")[1];
-
-    router.visit("/admin/product?page=" + pageNumber, {
-        preserveScroll: true,
-    });
-};
 </script>
 <template>
     <nav
@@ -37,7 +34,7 @@ const updatePaginationNumber = (link) => {
                     @click.prevent="
                         !link.active && !link.url
                             ? ''
-                            : updatePaginationNumber(link)
+                            : updatePageNumber(link)
                     "
                     v-html="link.label"
                     :key="index"
