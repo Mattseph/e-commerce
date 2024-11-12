@@ -21,7 +21,7 @@
             </a>
 
             <div
-                class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+                class="items-center justify-center hidden w-full md:flex md:w-auto md:order-1"
                 id="navbar-user"
             >
                 <ul
