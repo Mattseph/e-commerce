@@ -33,7 +33,7 @@ class ProductController extends Controller
 
         $this->applySearch($query, $request->search);
 
-        $products = ProductResource::collection($query->orderBy('id', 'desc')->paginate(10));
+        $products = ProductResource::collection($query->orderBy('id', 'desc')->paginate(4));
 
         $brands = BrandResource::collection(Brand::select('id', 'name')->get());
 
