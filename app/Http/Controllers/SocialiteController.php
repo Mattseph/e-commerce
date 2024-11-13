@@ -13,12 +13,17 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function googleLogin()
+    public function authProviderRedirect(string $provider)
     {
-        return Socialite::driver('google')->redirect();
+        if ($provider) {
+
+            return Socialite::driver($provider)->redirect();
+        }
+
+        return abort(404);
     }
 
-    public function googleAuth()
+    public function socialAuth($provider)
     {
 
 
@@ -44,4 +49,5 @@ class SocialiteController extends Controller
             dd($e);
         }
     }
+
 }
