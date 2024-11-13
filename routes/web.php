@@ -13,7 +13,8 @@ use App\Http\Controllers\Admin\AdminAuthController;
 Route::get('/', UserController::class);
 
 Route::controller(SocialiteController::class)->group(function() {
-    Route::get('auth/google', 'login')->name('auth.google.login');
+    Route::get('auth/google', 'googleLogin')->name('auth.google.login');
+    Route::get('auth/callback', 'googleAuth')->name('auth.google.callback');
 });
 
 Route::get('/dashboard', function () {
