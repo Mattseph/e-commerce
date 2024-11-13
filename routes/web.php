@@ -5,11 +5,16 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AdminAuthController;
 
 Route::get('/', UserController::class);
+
+Route::controller(SocialiteController::class)->group(function() {
+    Route::get('auth/google', 'login')->name('auth.google.login');
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
