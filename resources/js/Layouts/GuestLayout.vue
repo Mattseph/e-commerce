@@ -26,7 +26,8 @@ const isLoginRoute = window.location.pathname === "/login";
         <div v-if="isLoginRoute" class="flex items-center justify-items-center flex-col gap-4 mt-6 max-w-md w-full">
             <div class="font-bold text-xl">or</div>
 
-            <Link
+            <a
+             
                 :href="route('auth.google.login')"
                 class="w-full flex justify-center items-center text-white ml-2 bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-3 dark:focus:ring-[#4285F4]/55 me-2 mb-2"
             >
@@ -44,7 +45,7 @@ const isLoginRoute = window.location.pathname === "/login";
                     />
                 </svg>
                 Sign in with Google
-            </Link>
+            </a>
         </div>
     </div>
 </template>
