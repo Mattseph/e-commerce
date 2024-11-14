@@ -47,7 +47,8 @@ class ProductController extends Controller
         ]);
     }
 
-    protected function applySearch ($query, $search) {
+    protected function applySearch($query, $search)
+    {
         return $query->when($search, function ($query, $search) {
             $query->where('title', 'like', '%' . $search . '%');
         });
@@ -87,7 +88,7 @@ class ProductController extends Controller
         $img_data = [];
 
 
-        $images = $request->file('new_product_images');
+        $images = $request->file('product_images');
 
         foreach ($images as $image) {
             // Generate Unique Image Name

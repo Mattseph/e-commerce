@@ -57,7 +57,7 @@ const handleRemove = (file) => {
     console.log(file);
 };
 
-const handleFileChange = (file, fileList) => {
+const handleFileChange = (file) => {
     form.product_images.push(file);
 };
 

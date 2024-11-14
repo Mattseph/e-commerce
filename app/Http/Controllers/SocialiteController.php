@@ -13,35 +13,41 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    public function googleLogin()
+    public function authProviderRedirect(string $provider)
     {
-        return Socialite::driver('google')->redirect();
+        if ($provider) {
+
+            return Socialite::driver($provider)->redirect();
+        }
+
+        return abort(404);
     }
 
-    public function googleAuth()
+    public function socialAuth(string $provider)
     {
+        if ($provider) {
+            try {
+                $socialUser = Socialite::driver($provider)->user();
+                $user = User::where('auth_provider_id', $socialUser->id)->first();
 
+                if ($user) {
+                    Auth::login($user, true);
+                } else {
+                    $newUser = User::create([
+                        'name' => $socialUser->name,
+                        'email' => $socialUser->email,
+                        'auth_provider' => $provider,
+                        'auth_provider_id' => $socialUser->id,
+                        'password' => Hash::make('Password'),
+                    ]);
 
-        try {
-            $googleUser = Socialite::driver('google')->user();
+                    Auth::login($newUser, true);
+                }
 
-            $user = User::where('google_id', $googleUser->id)->first();
-
-            if ($user) {
-                Auth::login($user);
-            } else {
-                $newUser = User::create([
-                    'google_id' => $googleUser->id,
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'password' => Hash::make('Password'),
-                ]);
-
-                Auth::login($newUser);
+                return to_route('dashboard');
+            } catch (\Exception $e) {
+                dd($e);
             }
-            return to_route('dashboard');
-        } catch (\Exception $e) {
-            dd($e);
         }
     }
 }
