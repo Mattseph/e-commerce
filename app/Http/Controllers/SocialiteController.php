@@ -23,9 +23,9 @@ class SocialiteController extends Controller
         return abort(404);
     }
 
-    public function socialAuth($provider)
+    public function socialAuth(string $provider)
     {
-
+        dd($provider);
 
         try {
             $googleUser = Socialite::driver('google')->user();
