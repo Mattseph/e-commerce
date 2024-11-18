@@ -4,6 +4,7 @@ import { onMounted } from "vue";
 import { Head } from "@inertiajs/vue3";
 import Header from "@/Components/User/Header.vue";
 import Hero from "@/Components/User/Hero.vue";
+import MainContent from "@/Components/User/MainContent.vue";
 import Footer from "@/Components/User/Footer.vue";
 
 onMounted(() => {
@@ -17,6 +18,8 @@ onMounted(() => {
     <Header />
 
     <Hero />
+
+    <MainContent />
 
     <Footer />
 </template>
