@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
     <footer class="fixed bottom-0 left-0 z-20 w-full">
         <div
