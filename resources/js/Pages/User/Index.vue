@@ -7,6 +7,13 @@ import UserLayout from "@/Layouts/User/UserLayout.vue";
 onMounted(() => {
     initFlowbite();
 });
+
+defineProps({
+    products: {
+        type: Object,
+        required: true,
+    }
+});
 </script>
 
 <template>
