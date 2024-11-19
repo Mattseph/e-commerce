@@ -10,12 +10,14 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AdminAuthController;
 
-Route::get('/', UserController::class);
+Route::controller(UserController::class)->group(function () {
 
-Route::controller(SocialiteController::class)->group(function() {
+    Route::get('/', 'index')->name('user.index');
+});
+
+Route::controller(SocialiteController::class)->group(function () {
     Route::get('auth/redirection/{provider}', 'authProviderRedirect')->name('auth.redirection');
     Route::get('auth/{provider}/callback', 'socialAuth')->name('auth.callback');
-
 });
 
 Route::get('/dashboard', function () {
@@ -38,18 +40,17 @@ Route::middleware('guest', 'redirect_admin')->prefix('admin')->group(function ()
 Route::middleware('auth', 'is_admin')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-    Route::controller(ProductController::class)->prefix('product')->group( function () {
+    Route::controller(ProductController::class)->prefix('product')->group(
+        function () {
 
-        Route::get('/', 'index')->name('admin.product.index');
-        Route::get('/{product}', 'view')->name('admin.product.view');
-        Route::get('/create', 'create')->name('admin.product.create');
-        Route::post('/', 'store')->name('admin.product.store');
-        Route::get('/edit/{product}', 'edit')->name('admin.product.edit');
-        Route::put('/{product}', 'update')->name('admin.product.update');
-        Route::delete('/{product}', 'destroy')->name('admin.product.destroy');
-    }
-);
-
-
+            Route::get('/', 'index')->name('admin.product.index');
+            Route::get('/{product}', 'view')->name('admin.product.view');
+            Route::get('/create', 'create')->name('admin.product.create');
+            Route::post('/', 'store')->name('admin.product.store');
+            Route::get('/edit/{product}', 'edit')->name('admin.product.edit');
+            Route::put('/{product}', 'update')->name('admin.product.update');
+            Route::delete('/{product}', 'destroy')->name('admin.product.destroy');
+        }
+    );
 });
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
