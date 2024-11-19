@@ -169,7 +169,7 @@ if (props.products.data) {
 let pageNumber = ref(1),
     search = ref(props.search);
 
-const studentUrl = computed(() => {
+const productUrl = computed(() => {
     let url = new URL(route("admin.product.index"));
     url.searchParams.append("page", pageNumber.value);
 
@@ -193,7 +193,7 @@ watch(
     }
 );
 watch(
-    () => studentUrl.value,
+    () => productUrl.value,
     (newUrl) => {
         router.visit(newUrl, {
             preserveScroll: true,
