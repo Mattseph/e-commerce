@@ -8,12 +8,14 @@ onMounted(() => {
     initFlowbite();
 });
 
-defineProps({
+const props = defineProps({
     products: {
         type: Object,
         required: true,
-    }
+    },
 });
+
+console.log(props.products);
 </script>
 
 <template>
@@ -29,6 +31,7 @@ defineProps({
                 </h2>
 
                 <div
+                    v-for="product in props.products.data"
                     class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
                 >
                     <div class="group relative">
@@ -49,7 +52,7 @@ defineProps({
                                             aria-hidden="true"
                                             class="absolute inset-0"
                                         ></span>
-                                        Basic Tee
+                                        {{ product.title }}
                                     </a>
                                 </h3>
                                 <p class="mt-1 text-sm text-gray-500">Black</p>
