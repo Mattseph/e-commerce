@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function index () {
 
-        $products = ProductResource::collection(Product::orderBy('id', 'desc')->get());
+        $products = ProductResource::collection(Product::orderBy('id', 'desc')->limit(5)->  get());
 
         return Inertia::render('User/Index', [
             'products' => $products,
