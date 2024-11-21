@@ -44,7 +44,7 @@ class SocialiteController extends Controller
                     Auth::login($newUser, true);
                 }
 
-                return to_route('dashboard');
+                return to_route('user.index');
             } catch (\Exception $e) {
                 dd($e);
             }
