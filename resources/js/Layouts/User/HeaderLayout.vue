@@ -1,4 +1,9 @@
-<script setup></script>
+<script setup>
+import { usePage, Link } from "@inertiajs/vue3";
+const canLogin = usePage().props.canLogin;
+const canRegister = usePage().props.canRegister;
+const auth = usePage().props.auth;
+</script>
 
 <template>
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
@@ -67,9 +72,11 @@
             </div>
 
             <div
+                v-if="canLogin"
                 class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
             >
                 <button
+                    v-if="auth.user"
                     type="button"
                     class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                     id="user-menu-button"
@@ -78,12 +85,23 @@
                     data-dropdown-placement="bottom"
                 >
                     <span class="sr-only">Open user menu</span>
-                    <img
-                        class="w-8 h-8 rounded-full"
-                        src=""
-                        alt="user photo"
-                    />
+                    <img class="w-8 h-8 rounded-full" src="" alt="user photo" />
                 </button>
+
+                <div v-else>
+                    <Link
+                        :href="route('login')"
+                        class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                    >
+                        Login
+                    </Link>
+
+                    <Link
+                        :href="route('register')"
+                        class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                        >Register</Link
+                    >
+                </div>
                 <!-- Dropdown menu -->
                 <div
                     class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -130,6 +148,7 @@
                         </li>
                     </ul>
                 </div>
+
                 <button
                     data-collapse-toggle="navbar-user"
                     type="button"
