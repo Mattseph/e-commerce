@@ -9,7 +9,7 @@
                 role="alert"
             >
                 <span
-                    class="text-xs bg-primary-600 rounded-full text-white px-4 py-1.5 mr-3"
+                    class="text-xs bg-orange-500 rounded-full text-white px-4 py-1.5 mr-3"
                     >New</span
                 >
                 <span class="text-sm font-medium"
