@@ -29,6 +29,14 @@ const isLoginRoute = window.location.pathname === "/login";
             <div class="font-bold text-xl">or</div>
 
             <div class="w-full flex flex-col align-center gap-2 p-0 m-0">
+                <Link
+                    :href="route('register')"
+                    class="w-full flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-300 rounded-lg shadow-md px-6 py-3 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    title="Register"
+                >
+                    <span>Register</span>
+                </Link>
+
                 <a
                     :href="route('auth.redirection', 'google')"
                     class="w-full flex items-center justify-center bg-white dark:bg-gray-900 border border-gray-300 rounded-lg shadow-md px-6 py-2 text-sm font-medium text-gray-800 dark:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
