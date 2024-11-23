@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -30,26 +31,35 @@ class Product extends Model
 
     protected $with = ['category', 'brand', 'product_images'];
 
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function brand() {
+    public function brand()
+    {
         return $this->belongsTo(Brand::class);
     }
 
-    public function cart_items() {
+    public function cart_items()
+    {
         return $this->hasMany(CartItem::class);
     }
 
-    public function product_images() {
+    public function product_images()
+    {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function scopeInStock(Builder $query): void
+    {
+        $query->where('inStock', 1);
     }
 }
